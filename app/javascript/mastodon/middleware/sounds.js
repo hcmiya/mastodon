@@ -48,6 +48,16 @@ export default function soundsMiddleware() {
         type: 'audio/ogg;codecs=vorbis',
       },
     ]),
+    paro: createAudio([
+      {
+        src: '/sounds/proprietary/paro.opus',
+        type: 'audio/ogg;codecs=opus',
+      },
+      {
+        src: '/sounds/proprietary/paro.mp4',
+        type: 'audio/mp4;codecs=mp4a.40.2',
+      },
+    ]),
   };
 
   return () => next => action => {
