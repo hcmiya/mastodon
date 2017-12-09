@@ -182,14 +182,6 @@ export default class UI extends React.Component {
     this.setState({ draggingOver: false });
   }
 
-  handleServiceWorkerPostMessage = ({ data }) => {
-    if (data.type === 'navigate') {
-      this.context.router.history.push(data.path);
-    } else {
-      console.warn('Unknown message type:', data.type);
-    }
-  }
-
   componentWillMount () {
     window.addEventListener('beforeunload', this.handleBeforeUnload, false);
     window.addEventListener('resize', this.handleResize, { passive: true });
@@ -198,10 +190,6 @@ export default class UI extends React.Component {
     document.addEventListener('drop', this.handleDrop, false);
     document.addEventListener('dragleave', this.handleDragLeave, false);
     document.addEventListener('dragend', this.handleDragEnd, false);
-
-    if ('serviceWorker' in  navigator) {
-      navigator.serviceWorker.addEventListener('message', this.handleServiceWorkerPostMessage);
-    }
 
     this.props.dispatch(refreshHomeTimeline());
     this.props.dispatch(refreshNotifications());

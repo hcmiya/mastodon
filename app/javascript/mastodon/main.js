@@ -1,4 +1,3 @@
-import * as WebPushSubscription from './web_push_subscription';
 import Mastodon from './containers/mastodon';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -22,11 +21,6 @@ function main() {
     const props = JSON.parse(mountNode.getAttribute('data-props'));
 
     ReactDOM.render(<Mastodon {...props} />, mountNode);
-    if (process.env.NODE_ENV === 'production') {
-      // avoid offline in dev mode because it's harder to debug
-      require('offline-plugin/runtime').install();
-      WebPushSubscription.register();
-    }
     perf.stop('main()');
   });
 }

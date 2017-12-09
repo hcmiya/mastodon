@@ -38,7 +38,6 @@ const unescapeHTML = (html) => {
 
 export function updateNotifications(notification, intlMessages, intlLocale) {
   return (dispatch, getState) => {
-    const showAlert = getState().getIn(['settings', 'notifications', 'alerts', notification.type], true);
     const playSound = getState().getIn(['settings', 'notifications', 'sounds', notification.type], true);
 
     dispatch({
@@ -50,18 +49,6 @@ export function updateNotifications(notification, intlMessages, intlLocale) {
     });
 
     fetchRelatedRelationships(dispatch, [notification]);
-
-    // Desktop notifications
-    if (typeof window.Notification !== 'undefined' && showAlert) {
-      const title = new IntlMessageFormat(intlMessages[`notification.${notification.type}`], intlLocale).format({ name: notification.account.display_name.length > 0 ? notification.account.display_name : notification.account.username });
-      const body  = (notification.status && notification.status.spoiler_text.length > 0) ? notification.status.spoiler_text : unescapeHTML(notification.status ? notification.status.content : '');
-
-      const notify = new Notification(title, { body, icon: notification.account.avatar, tag: notification.id });
-      notify.addEventListener('click', () => {
-        window.focus();
-        notify.close();
-      });
-    }
   };
 };
 
