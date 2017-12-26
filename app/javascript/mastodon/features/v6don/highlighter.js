@@ -342,6 +342,7 @@ shorttab.don = {
 // 単色絵文字
 [
   { name: 'hohoemi', char: '\u{f0000}' },
+  { name: 'jis2004', char: '\u{f0001}' },
 ].forEach(e => {
   shorttab[e.name] = {
     // 再帰処理内で1文字として扱わせるために一旦無効なimgに変換、再帰を抜けた後にテキスト化
