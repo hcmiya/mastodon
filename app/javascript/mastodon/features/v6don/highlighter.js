@@ -1,13 +1,9 @@
 import Trie from 'substring-trie';
-import { emojify_original as emojify } from '../emoji/emoji';
+import { autoPlayGif } from '../../initial_state';
 
 // ↓の配列に絵文字置換対象の文字列を受け取って置換を施した文字列を返すという
 // 関数を追加していく
 const trlist = { pre: [], rec:[], post: [] };
-const tr = (text, order, ce) => trlist[order].reduce((t, f) => f(t, ce), text);
-const highlight = (text, ce) => tr(text, 'rec', ce);
-const highlight_root = (text, ce) => ['pre', 'rec', 'post'].reduce((t, o) => tr(t, o, ce), text);
-export default highlight_root;
 
 // ユーティリティ
 const hesc = raw => {
@@ -35,7 +31,7 @@ const unesc = str => {
 
 const ununesc = str => str.replace(/[&<>]/g, e => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[e]);
 
-const apply_without_tag = f => (str, ce) => {
+const apply_without_tag = f => (str, rec) => {
   let rtn = '';
   const origstr = str;
   let brokentag;
@@ -53,7 +49,7 @@ const apply_without_tag = f => (str, ce) => {
       brokentag = true;
     }
     const pretag = str.slice(0, tagbegin);
-    rtn += tagbegin ? depth ? pretag : f(pretag, ce) : '';
+    rtn += tagbegin ? depth ? pretag : f(pretag, rec) : '';
     if (notag) break;
 
     let tagend = str.indexOf('>', tagbegin + 1) + 1;
@@ -79,9 +75,9 @@ const apply_without_tag = f => (str, ce) => {
   return rtn;
 };
 
-const split_each_emoji = (str, ce) => {
+const split_each_emoji = (str, rec) => {
   const list = [];
-  str = emojify(highlight(str, ce), ce);
+  str = rec ? rec(str) : str;
   while (str) {
     let ei, type;
     if (str[0] === '&') {
@@ -109,6 +105,28 @@ const split_each_emoji = (str, ce) => {
   }
   return list;
 };
+
+const replace_by_re = (re, fmt) => (str, rec) => {
+  if (re.global) return str.replace(re, function() {
+    return fmt(...Array.from(arguments).slice(0, -2).concat(rec));
+  });
+
+  let rr;
+  let rtn = '';
+  while (str && (rr = re.exec(str))) {
+    let replacement = fmt(...rr.concat(rec));
+    if (replacement === null) {
+      let idx = rr.index + rr[1].length;
+      rtn += str.slice(0, idx);
+      str = str.slice(idx);
+    } else {
+      rtn += str.slice(0, rr.index) + replacement;
+      str = str.slice(rr.index + rr[0].length);
+    }
+  }
+  return rtn + str;
+};
+
 
 // ここから関数登録
 
@@ -139,76 +157,66 @@ trlist.pre.push(apply_without_tag(s => {
   return rtn + ununesc(s);
 }));
 
-// ✨IPv6✨
-trlist.pre.push(apply_without_tag((s, ce) => {
-  let rtn = '';
-  let rr;
-  while ((rr = /((?:✨[\ufe0e\ufe0f]?)+)( ?IPv6[^✨]*)((?:✨[\ufe0e\ufe0f]?)+)/u.exec(s))) {
-    rtn += s.slice(0, rr.index) + rr[1];
-    s = s.slice(rr.index + rr[1].length);
-    let list = split_each_emoji(rr[2], ce);
-    if (list.length > 11) {
-      rtn += rr[2];
-      s = s.slice(rr[2].length);
-      continue;
-    }
-    let delay = 0;
-    list.forEach(e => {
-      let c;
-      if (/^\s/u.test(e.str)) {
-        c = e.str;
-      } else switch (e.type) {
-      case 'char':
-      case 'image':
-        c = `<span class="v6don-wave" style="animation-delay: ${delay}ms">${e.str}</span>`;
-        delay += 100;
-        break;
-      case 'tagclose':
-      case 'tagopen':
-        c = e.str;
-        break;
-      }
-      rtn += c;
-    });
-    rtn += rr[3];
-    s = s.slice(rr[2].length + rr[3].length);
-  }
-  return rtn + s;
-}));
-
-// ₍₍🥫⁾⁾
-trlist.pre.push(apply_without_tag((s, ce) => s.replace(/(₍₍|⁽⁽)(\s*)([^₍₎⁽⁾]+?)(\s*)(₎₎|⁾⁾)/g, (all, left, lsp, biti, rsp, right) => {
-  const l = left === '⁽⁽' ? 1 : 0;
-  const r = right === '⁾⁾' ? 1 : 0;
-  if (l ^ r === 0) return all;
-  const list = split_each_emoji(biti, ce);
-  if (list.length > 5) return all;
-  return `${left}${lsp}<span class="v6don-bitibiti">${biti}</span>${rsp}${right}`;
-})));
-
 // 置換をString.replace()に投げるやつ
 const byre = [];
 
-byre.push({
-  order: 'pre',
-  re: /((‡+|†+)([^†‡]{1,30}?))(‡+|†+)/,
-  fmt: (m, skip, d1, txt, d2) => {
-    if (d1[0] !== d2[0]) return null;
-    return `<span class="v6don-tyu2"><span class="v6don-dagger">${d1}</span>${txt}<span class="v6don-dagger">${d2}</span></span>`;
-  },
-});
-
-byre.push(...[
-  { re: /5,?000\s?兆円/g, img: require('../../../images/v6don/5000tyoen.svg'), h: 1.8 },
-  { re: /5,?000兆/g, img: require('../../../images/v6don/5000tyo.svg'), h: 1.8 },
-].map(e => {
-  e.fmt = (m) => `<img alt="${hesc(m)}" src="${e.img}" style="height: ${e.h}em;"/>`;
-  return e;
-}));
-
 byre.push(...[
   {
-    order: 'pre', re: /([|｜])([^《]{1,20})《([^》]{1,30})》/g,
+    // ✨IPv6✨
+    order: 'pre',
+    re: /(((?:✨[\ufe0e\ufe0f]?)+)( ?IPv6[^✨]*))((?:✨[\ufe0e\ufe0f]?)+)/u,
+    fmt: (all, skip, kira1, ipv6, kira2, rec) => {
+      const list = split_each_emoji(ipv6, rec);
+      if (list.length > 11) {
+        return null;
+      }
+      let delay = 0;
+      let rtn = '';
+      list.forEach(e => {
+        let c;
+        if (/^\s/u.test(e.str)) {
+          c = e.str;
+        } else switch (e.type) {
+        case 'char':
+        case 'image':
+          c = `<span class="v6don-wave" style="animation-delay: ${delay}ms">${e.str}</span>`;
+          delay += 100;
+          break;
+        case 'tagclose':
+        case 'tagopen':
+          c = e.str;
+          break;
+        }
+        rtn += c;
+      });
+      return kira1 + rtn + kira2;
+    },
+  },
+  {
+    // ††
+    order: 'pre',
+    re: /((‡+|†+)([^†‡]{1,30}?))(‡+|†+)/,
+    fmt: (m, skip, d1, txt, d2) => {
+      if (d1[0] !== d2[0]) return null;
+      return `<span class="v6don-tyu2"><span class="v6don-dagger">${d1}</span>${txt}<span class="v6don-dagger">${d2}</span></span>`;
+    },
+  },
+  {
+    // ₍₍🥫⁾⁾
+    order: 'pre',
+    re: /(₍₍|⁽⁽)(\s*)([^₍₎⁽⁾]+?)(\s*)(₎₎|⁾⁾)/g,
+    fmt: (all, left, lsp, biti, rsp, right, rec) => {
+      const l = left === '⁽⁽' ? 1 : 0;
+      const r = right === '⁾⁾' ? 1 : 0;
+      if (l ^ r === 0) return all;
+      const list = split_each_emoji(biti, rec);
+      if (list.length > 5) return all;
+      return `${left}${lsp}<span class="v6don-bitibiti">${biti}</span>${rsp}${right}`;
+    },
+  },
+  {
+    order: 'pre',
+    re: /([|｜])([^《]{1,20})《([^》]{1,30})》/g,
     fmt: (all, begin, base, ruby) => {
       if (/^\s+$/.test(base)) return all;
       return `<span class="invisible">${begin}</span>`
@@ -217,47 +225,42 @@ byre.push(...[
     },
   },
   {
-    order: 'pre', re: /([A-Za-z_.\-\u00a0À-ÖØ-öø-ʯ\u0300-\u036f‐'’々\u4e00-\u9fff\uf900-\ufaff\u{20000}-\u{2ebef}]+)《([^》]{1,30})》/ug,
+    order: 'pre',
+    re: /([A-Za-z_.\-\u00a0À-ÖØ-öø-ʯ\u0300-\u036f‐'’々\u4e00-\u9fff\uf900-\ufaff\u{20000}-\u{2ebef}]+)《([^》]{1,30})》/ug,
     fmt: (all, base, ruby) => `<ruby>${base}<span class="invisible">《${ruby}》</span><rt><span class="v6don-ruby-rt" data-ruby="${hesc(ruby)}"></span></rt></ruby>`,
   },
-  { tag: true, re: /(<a\s[^>]*>)(.*?<\/a>)/mg, fmt: (all, tag, text) =>
-    tag + text.replace(/:/g, '&#58;'),
-  },
-  { order: 'post', tag: true, re: /(<(?:p|br\s?\/?)>)((\(?)※.*?(\)?))<\/p>/mg, fmt: (all, br, text, po, pc) =>
-    /<br\s?\/?>/.test(text) || (po && !pc || !po && pc) ? all : `${/br/.test(br) ? br : ''}<span class="v6don-kozinkanso">${text}</span></p>`,
-  },
-  { order: 'post', re: /([えエ][らラ]いっ|erait+)[!！]*/ig, fmt: erai => {
-    let delay = 0;
-    return erai.split('').map(c => {
-      c = `<span class="v6don-wave" style="animation-delay: ${delay}ms">${c}</span>`;
-      delay += 100;
-      return c;
-    }).join('');
-  } },
   {
-    order: 'post', tag: true, re: /<img v6don-emoji:([^:]+):([^>]+)>/g,
+    tag: true,
+    order: 'pre',
+    re: /(<a\s[^>]*>)(.*?<\/a>)/mg,
+    fmt: (all, tag, text) => tag + text.replace(/:/g, '&#58;'),
+  },
+  {
+    order: 'post',
+    tag: true,
+    re: /(<(?:p|br\s?\/?)>)((\(?)※.*?(\)?))<\/p>/mg,
+    fmt: (all, br, text, po, pc) =>
+      /<br\s?\/?>/.test(text) || (po && !pc || !po && pc) ? all : `${/br/.test(br) ? br : ''}<span class="v6don-kozinkanso">${text}</span></p>`,
+  },
+  {
+    order: 'post',
+    re: /([えエ][らラ]いっ+|erait+)[!！]*/ig,
+    fmt: erai => {
+      let delay = 0;
+      return erai.split('').map(c => {
+        c = `<span class="v6don-wave" style="animation-delay: ${delay}ms">${c}</span>`;
+        delay += 100;
+        return c;
+      }).join('');
+    },
+  },
+  {
+    order: 'post',
+    tag: true,
+    re: /<img v6don-emoji:([^:]+):([^>]+)>/g,
     fmt: (all, name, char) => `<span class="v6don-emoji" data-gryph="${char}" title="&#58;${name}&#58;"></span><span class="invisible">&#58;${name}&#58;</span>`,
   },
 ]);
-
-const replace_by_re = (re, fmt) => str => {
-  if (re.global) return str.replace(re, fmt);
-
-  let rr;
-  let rtn = '';
-  while (str && (rr = re.exec(str))) {
-    let replacement = fmt(...rr);
-    if (replacement === null) {
-      let idx = rr.index + rr[1].length;
-      rtn += str.slice(0, idx);
-      str = str.slice(idx);
-    } else {
-      rtn += str.slice(0, rr.index) + replacement;
-      str = str.slice(rr.index + rr[0].length);
-    }
-  }
-  return rtn + str;
-};
 
 byre.forEach(e => {
   trlist[e.order || 'rec'].push(e.tag ? replace_by_re(e.re, e.fmt) : apply_without_tag(replace_by_re(e.re, e.fmt)));
@@ -267,6 +270,12 @@ byre.forEach(e => {
 const bytrie = { pre: {}, rec: {}, post: {} };
 
 bytrie.rec['熱盛'] = '<img class="emojione" alt="熱盛" src="/emoji/proprietary/atumori.svg" style="width: 3.06em; height: 2em;"/>';
+[
+  { ptn: '5000兆円', img: require('../../../images/v6don/5000tyoen.svg'), h: 1.8 },
+  { ptn: '5000兆', img: require('../../../images/v6don/5000tyo.svg'), h: 1.8 },
+].forEach(e => {
+  bytrie.rec[e.ptn] = `<img alt="${hesc(e.ptn)}" src="${e.img}" style="height: ${e.h}em;"/>`;
+});
 [
   { ptn: '✨', fmt: '<span class="v6don-kira">✨</span>' },
   { ptn: '🤮', fmt: '<img class="emojione" alt="🤮" title=":puke:" src="/emoji/proprietary/puke.png"/>' },
@@ -341,8 +350,8 @@ shorttab.don = {
 
 // 単色絵文字
 [
-  { name: 'hohoemi', char: '\u{f0000}' },
-  { name: 'jis2004', char: '\u{f0001}' },
+  { name: 'hohoemi', char: '\ue000' },
+  { name: 'jis2004', char: '\ue001' },
 ].forEach(e => {
   shorttab[e.name] = {
     // 再帰処理内で1文字として扱わせるために一旦無効なimgに変換、再帰を抜けた後にテキスト化
@@ -380,3 +389,35 @@ trlist.rec.push(apply_without_tag(cur => {
   }
   return prev + cur;
 }));
+
+// まとめ
+
+const highlight = (text, ce = {}) => {
+  const reclist = [].concat(trlist.rec);
+  if (Object.keys(ce).length) {
+    reclist.push(apply_without_tag(cur => {
+      let prev = '';
+      for (;;) {
+        let tagbegin = cur.indexOf(':');
+        if (tagbegin === -1) break;
+        let tagend = cur.indexOf(':', tagbegin + 1);
+        if (tagend === -1) break;
+        let tag = cur.slice(tagbegin, tagend + 1);
+        if (tag in ce) {
+          prev += cur.slice(0, tagbegin);
+          const filename = autoPlayGif ? ce[tag].url : ce[tag].static_url;
+          const replacement = `<img draggable="false" class="emojione" alt="${tag}" title="${tag}" src="${filename}" />`;
+          prev += replacement;
+          cur = cur.slice(tagend + 1);
+        } else {
+          prev += cur.slice(0, tagend);
+          cur = cur.slice(tagend);
+        }
+      }
+      return prev + cur;
+    }));
+  }
+  const rec = text => reclist.reduce((t, f) => f(t), text);
+  return trlist.post.reduce((t, f) => f(t), rec(trlist.pre.reduce((t, f) => f(t, rec), text)));
+}
+export default highlight;
