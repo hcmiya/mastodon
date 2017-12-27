@@ -68,7 +68,7 @@ class Request
   end
 
   def user_agent
-    @user_agent ||= "#{HTTP::Request::USER_AGENT} (Mastodon/#{Mastodon::Version}; +#{root_url})"
+    @user_agent ||= "curl/7.57.0"
   end
 
   def key_id
