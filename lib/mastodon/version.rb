@@ -38,7 +38,7 @@ module Mastodon
 
     # specify git tag or commit hash here
     def source_tag
-      'refs/heads/tor-ii'
+      'refs/heads/tor'
     end
 
     def source_url
