@@ -81,7 +81,7 @@ class Request
   end
 
   def timeout
-    { write: 10, connect: 10, read: 10 }
+    { write: 20, connect: 15, read: 20 }
   end
 
   def http_client
