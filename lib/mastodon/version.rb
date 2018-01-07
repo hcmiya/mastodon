@@ -21,7 +21,7 @@ module Mastodon
     end
 
     def flags
-      ''
+      '~v6don'
     end
 
     def to_a
