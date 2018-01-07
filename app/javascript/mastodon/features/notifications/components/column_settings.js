@@ -11,12 +11,11 @@ export default class ColumnSettings extends React.PureComponent {
     settings: ImmutablePropTypes.map.isRequired,
     pushSettings: ImmutablePropTypes.map.isRequired,
     onChange: PropTypes.func.isRequired,
-    onSave: PropTypes.func.isRequired,
     onClear: PropTypes.func.isRequired,
   };
 
-  onPushChange = (key, checked) => {
-    this.props.onChange(['push', ...key], checked);
+  onPushChange = (path, checked) => {
+    this.props.onChange(['push', ...path], checked);
   }
 
   render () {
