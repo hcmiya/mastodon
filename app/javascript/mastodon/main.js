@@ -1,4 +1,4 @@
-import Mastodon from './containers/mastodon';
+import { default as Mastodon, store } from './containers/mastodon';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ready from './ready';

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl } from 'react-intl';
 import ColumnSettings from '../components/column_settings';
-import { changeSetting, saveSettings } from '../../../actions/settings';
+import { changeSetting } from '../../../actions/settings';
 import { clearNotifications } from '../../../actions/notifications';
 import { openModal } from '../../../actions/modal';
 
@@ -16,14 +16,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, { intl }) => ({
 
-  onChange (key, checked) {
-    if (key[0] !== 'push') {
-      dispatch(changeSetting(['notifications', ...key], checked));
-    }
-  },
-
-  onSave () {
-    dispatch(saveSettings());
+  onChange (path, checked) {
+    dispatch(changeSetting(['notifications', ...path], checked));
   },
 
   onClear () {
