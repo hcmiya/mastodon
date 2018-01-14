@@ -34,6 +34,8 @@ export const COMPOSE_UNMOUNT = 'COMPOSE_UNMOUNT';
 export const COMPOSE_SENSITIVITY_CHANGE = 'COMPOSE_SENSITIVITY_CHANGE';
 export const COMPOSE_SPOILERNESS_CHANGE = 'COMPOSE_SPOILERNESS_CHANGE';
 export const COMPOSE_SPOILER_TEXT_CHANGE = 'COMPOSE_SPOILER_TEXT_CHANGE';
+export const COMPOSE_V6DON_FOOTER_CHANGE = 'COMPOSE_V6DON_FOOTER_CHANGE';
+export const COMPOSE_V6DON_FOOTER_TEXT_CHANGE = 'COMPOSE_V6DON_FOOTER_TEXT_CHANGE';
 export const COMPOSE_VISIBILITY_CHANGE  = 'COMPOSE_VISIBILITY_CHANGE';
 export const COMPOSE_LISTABILITY_CHANGE = 'COMPOSE_LISTABILITY_CHANGE';
 export const COMPOSE_COMPOSING_CHANGE = 'COMPOSE_COMPOSING_CHANGE';
@@ -91,7 +93,12 @@ export function mentionCompose(account, router) {
 
 export function submitCompose() {
   return function (dispatch, getState) {
-    const status = getState().getIn(['compose', 'text'], '');
+    let footer = '';
+    if (getState().getIn(['compose', 'v6don_footer'])) {
+      footer = getState().getIn(['compose', 'v6don_footer_text']);
+      if (footer) footer = ' ' + footer;
+    }
+    const status = getState().getIn(['compose', 'text'], '') + footer;
 
     if (!status || !status.length) {
       return;
@@ -349,6 +356,13 @@ export function changeComposeSpoilerness() {
 export function changeComposeSpoilerText(text) {
   return {
     type: COMPOSE_SPOILER_TEXT_CHANGE,
+    text,
+  };
+};
+
+export function changeComposeV6donFooterText(text) {
+  return {
+    type: COMPOSE_V6DON_FOOTER_TEXT_CHANGE,
     text,
   };
 };

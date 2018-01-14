@@ -123,3 +123,12 @@ ruby {
 .v6don-estclock {
   padding: 10px;
 }
+
+.compose-form__v6don-footer-form > input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.compose-form__v6don-footer-form > input:disabled {
+  display: none;
+}

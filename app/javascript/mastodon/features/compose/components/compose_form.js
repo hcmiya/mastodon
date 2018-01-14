@@ -9,6 +9,7 @@ import UploadButtonContainer from '../containers/upload_button_container';
 import { defineMessages, injectIntl } from 'react-intl';
 import Collapsable from '../../../components/collapsable';
 import SpoilerButtonContainer from '../containers/spoiler_button_container';
+import V6donFooterButtonContainer from '../containers/v6don-footer-button-container.js';
 import PrivacyDropdownContainer from '../containers/privacy_dropdown_container';
 import SensitiveButtonContainer from '../containers/sensitive_button_container';
 import EmojiPickerDropdown from '../containers/emoji_picker_dropdown_container';
@@ -35,8 +36,10 @@ export default class ComposeForm extends ImmutablePureComponent {
     suggestion_token: PropTypes.string,
     suggestions: ImmutablePropTypes.list,
     spoiler: PropTypes.bool,
+    v6don_footer: PropTypes.bool,
     privacy: PropTypes.string,
     spoiler_text: PropTypes.string,
+    v6don_footer_text: PropTypes.string,
     focusDate: PropTypes.instanceOf(Date),
     preselectDate: PropTypes.instanceOf(Date),
     is_submitting: PropTypes.bool,
@@ -47,6 +50,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     onFetchSuggestions: PropTypes.func.isRequired,
     onSuggestionSelected: PropTypes.func.isRequired,
     onChangeSpoilerText: PropTypes.func.isRequired,
+    onChangeV6donFooterText: PropTypes.func.isRequired,
     onPaste: PropTypes.func.isRequired,
     onPickEmoji: PropTypes.func.isRequired,
     showSearch: PropTypes.bool,
@@ -91,6 +95,10 @@ export default class ComposeForm extends ImmutablePureComponent {
 
   handleChangeSpoilerText = (e) => {
     this.props.onChangeSpoilerText(e.target.value);
+  }
+
+  handleChangeV6donFooterText = (e) => {
+    this.props.onChangeV6donFooterText(e.target.value);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -192,12 +200,23 @@ export default class ComposeForm extends ImmutablePureComponent {
           <UploadFormContainer />
         </div>
 
+        <div className='compose-form__v6don-footer-form'>
+          <input
+            type='text'
+            placeholder='実況用フッタ'
+            value={this.props.v6don_footer_text}
+            onChange={this.handleChangeV6donFooterText}
+            disabled={!this.props.v6don_footer}
+          />
+        </div>
+
         <div className='compose-form__buttons-wrapper'>
           <div className='compose-form__buttons'>
             <UploadButtonContainer />
             <PrivacyDropdownContainer />
             <SensitiveButtonContainer />
             <SpoilerButtonContainer />
+            <V6donFooterButtonContainer />
           </div>
           <div className='character-counter__wrapper'><CharacterCounter max={500} text={text} /></div>
         </div>

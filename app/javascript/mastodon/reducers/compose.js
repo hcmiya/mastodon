@@ -19,6 +19,8 @@ import {
   COMPOSE_SENSITIVITY_CHANGE,
   COMPOSE_SPOILERNESS_CHANGE,
   COMPOSE_SPOILER_TEXT_CHANGE,
+  COMPOSE_V6DON_FOOTER_CHANGE,
+  COMPOSE_V6DON_FOOTER_TEXT_CHANGE,
   COMPOSE_VISIBILITY_CHANGE,
   COMPOSE_COMPOSING_CHANGE,
   COMPOSE_EMOJI_INSERT,
@@ -38,6 +40,8 @@ const initialState = ImmutableMap({
   sensitive: false,
   spoiler: false,
   spoiler_text: '',
+  v6don_footer: false,
+  v6don_footer_text: '',
   privacy: null,
   text: '',
   focusDate: null,
@@ -186,6 +190,13 @@ export default function compose(state = initialState, action) {
     return state
       .set('spoiler_text', action.text)
       .set('idempotencyKey', uuid());
+  case COMPOSE_V6DON_FOOTER_CHANGE:
+    return state.withMutations(map => {
+      map.set('v6don_footer', !state.get('v6don_footer'));
+    });
+  case COMPOSE_V6DON_FOOTER_TEXT_CHANGE:
+    return state
+      .set('v6don_footer_text', action.text);
   case COMPOSE_VISIBILITY_CHANGE:
     return state
       .set('privacy', action.value)
