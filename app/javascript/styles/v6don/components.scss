@@ -127,8 +127,44 @@ ruby {
 .compose-form__v6don-footer-form > input {
   width: 100%;
   box-sizing: border-box;
+  
+  &:disabled {
+    display: none;
+  }
 }
 
-.compose-form__v6don-footer-form > input:disabled {
-  display: none;
+.v6don-sinitai {
+  > span {
+    animation-duration: 0.5s;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+  }
+  
+  &-si {
+    animation-name: v6don-sinitai-0;
+  }
+  &-ni {
+    animation-name: v6don-sinitai-1;
+  }
+  &-ta {
+    animation-name: v6don-sinitai-2;
+  }
+  &-i {
+    animation-name: v6don-sinitai-3;
+  }
+}
+
+@for $x from 0 through 3 {
+  @keyframes v6don-sinitai-#{$x} {
+    @for $i from 0 through 5 {
+      #{$i * 16.6}% {
+        color: hsl($i * 60 + $x * 90, 100%, 90%);
+        text-shadow: 0px 0px 4px hsl($i * 60 + $x * 90, 100%, 55%), 0px 0px 1px hsl($i * 60 + $x * 90, 100%, 55%), 0px 0px 1px hsl($i * 60 + $x * 90, 100%, 55%);
+      }
+    }
+    100% {
+      color: hsl($x * 90, 100%, 90%);
+      text-shadow: 0px 0px 4px hsl($x * 90, 100%, 55%), 0px 0px 1px hsl($x * 90, 100%, 55%), 0px 0px 1px hsl($x * 90, 100%, 55%);
+    }
+  }
 }
