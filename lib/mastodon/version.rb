@@ -9,11 +9,11 @@ module Mastodon
     end
 
     def minor
-      1
+      2
     end
 
     def patch
-      3
+      0
     end
 
     def pre
@@ -21,7 +21,7 @@ module Mastodon
     end
 
     def flags
-      '~v6don'
+      'rc1'
     end
 
     def to_a
@@ -29,7 +29,7 @@ module Mastodon
     end
 
     def to_s
-      [to_a.join('.'), flags].join
+      [to_a.join('.'), flags, '~v6don'].join
     end
 
     def source_base_url
