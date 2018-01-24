@@ -280,6 +280,7 @@ bytrie.rec['熱盛'] = '<img class="emojione" alt="熱盛" src="/emoji/proprieta
   { ptn: '✨', fmt: '<span class="v6don-kira">✨</span>' },
   { ptn: '🤮', fmt: '<img class="emojione" alt="🤮" title=":puke:" src="/emoji/proprietary/puke.png"/>' },
   { ptn: 'これすき', fmt: '<span class="v6don-koresuki">これすき</span>' },
+  { ptn: '死にたい', fmt: '<span class="v6don-sinitai"><span class="v6don-sinitai-si">死</span><span class="v6don-sinitai-ni">に</span><span class="v6don-sinitai-ta">た</span><span class="v6don-sinitai-i">い</span></span>' },
 ].forEach(e => {
   bytrie.post[e.ptn] = e.fmt;
 });
