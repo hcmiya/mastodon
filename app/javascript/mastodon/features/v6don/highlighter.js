@@ -107,7 +107,7 @@ const split_each_emoji = (str, rec) => {
 };
 
 const replace_by_re = (re, fmt) => (str, rec) => {
-  if (re.global) return str.replace(re, function() {
+  if (re.global) return str.replace(re, typeof(fmt) === 'string' ? fmt : function() {
     return fmt(...Array.from(arguments).slice(0, -2).concat(rec));
   });
 
@@ -253,6 +253,12 @@ byre.push(...[
         return c;
       }).join('');
     },
+  },
+  {
+    order: 'post',
+    tag: true,
+    re: /説(。*\s*(?:<\/p>|<br\s*\/?>))/igm,
+    fmt: '<span class="v6don-setu">説</span>$1',
   },
   {
     order: 'post',
