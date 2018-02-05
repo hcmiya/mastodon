@@ -13,6 +13,8 @@ import spring from 'react-motion/lib/spring';
 import SearchResultsContainer from './containers/search_results_container';
 import { changeComposing } from '../../actions/compose';
 
+import ESTClock from '../v6don/est_clock';
+
 const messages = defineMessages({
   start: { id: 'getting_started.heading', defaultMessage: 'Getting started' },
   home_timeline: { id: 'tabs_bar.home', defaultMessage: 'Home' },
@@ -94,6 +96,7 @@ export default class Compose extends React.PureComponent {
           <div className='drawer__inner' onFocus={this.onFocus}>
             <NavigationContainer onClose={this.onBlur} />
             <ComposeFormContainer />
+            <ESTClock UTC={true} />
             {multiColumn && <div className='mastodon' />}
           </div>
 
