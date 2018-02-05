@@ -6,6 +6,7 @@ class Time extends React.PureComponent {
 
   static propTypes = {
     timeZone: PropTypes.string,
+    full: PropTypes.bool,
   };
 
   constructor() {
@@ -33,7 +34,7 @@ class Time extends React.PureComponent {
     this.nodes.root = ReactDOM.findDOMNode(this);
     this.nodes.min = this.nodes.root.querySelector('.v6don-estclock-permin');
     this.prevTickMin = Math.floor(now / 60000);
-    if (!this.props.timeZone) {
+    if (this.props.full) {
       this.nodes.sec = this.nodes.root.querySelector('.v6don-estclock-sec');
       this.nodes.tick = this.nodes.root.querySelector('.v6don-estclock-tick');
       this.prevTickSec = Math.floor(now / 1000);
@@ -52,13 +53,13 @@ class Time extends React.PureComponent {
   }
 
   fdate() {
-    return (this.props.timeZone ? '' : `${this.ftime('year')}-${this.ftime('month')}-`) + `${this.ftime('date')} ${this.ftime('hour')}:${this.ftime('minute')}`;
+    return (this.props.full ? `${this.ftime('year')}-${this.ftime('month')}-` : '') + `${this.ftime('date')} ${this.ftime('hour')}:${this.ftime('minute')}`;
   }
 
   tick() {
     const now = Date.now();
     this.d.setTime(now);
-    if (this.nodes.sec) {
+    if (this.props.full) {
       const tickSec = Math.floor(now / 1000);
       const tickHalfSec = Math.floor(now / 500);
       if (tickSec > this.prevTickSec) {
@@ -75,19 +76,16 @@ class Time extends React.PureComponent {
     if (tickMin > this.prevTickMin) {
       this.prevTickMin = tickMin;
       this.nodes.min.textContent = this.fdate();
-      if (!this.sec) {
-        this.nodes.root.setAttribute('datetime', this.d.toISOString().replace(/:\d+\.\d+/, ''));
-      }
+      this.nodes.root.setAttribute('datetime', this.d.toISOString().replace(this.props.full ? /\.\d+/ : /:\d+\.\d+/, ''));
     }
     this.fid = requestAnimationFrame(this.tick);
   }
 
   render() {
-    const sec = this.props.timeZone ? null :
-      (<span>
+    const sec = this.props.full ? (<span>
         <span className='v6don-estclock-tick'>:</span>
         <span className='v6don-estclock-sec'>{this.ftime('second')}</span>
-      </span>);
+      </span>) : null;
     return (<time dateTime={this.d.toISOString().replace(/\.\d+/, '')}>
       <span className='v6don-estclock-permin'>{this.fdate()}</span>
       {sec}
@@ -96,4 +94,15 @@ class Time extends React.PureComponent {
 
 }
 
-export default () => <p className='v6don-estclock'>Local: <Time />, <abbr title='Eugen Standard Time'>EST</abbr>: <Time timeZone='Europe/Berlin' /></p>;
+export default (props) => {
+  let pfx_, fullclk_;
+  if (props.UTC) {
+    fullclk_ = <Time timeZone='UTC' full={true} />;
+    pfx_ = 'UTC';
+  } else {
+    fullclk_ = <Time full={true} />;
+    pfx_ = 'Local';
+  }
+  const pfx = pfx_, fullclk = fullclk_;
+  return (<p className='v6don-estclock'>{pfx}: {fullclk}, <abbr title='Eugen Standard Time'>EST</abbr>: <Time timeZone='Europe/Berlin' /></p>);
+}
