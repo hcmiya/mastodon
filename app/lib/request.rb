@@ -11,7 +11,7 @@ class Request
   def initialize(verb, url, **options)
     @verb    = verb
     @url     = Addressable::URI.parse(url).normalize
-    @options = options.merge(socket_class: Socket).merge(Rails.configuration.x.http_client_proxy[@url.scheme] || {})
+    @options = options.merge(socket_class: Socket).merge(Rails.configuration.x.http_client_proxy)
     @headers = {}
 
     set_common_headers!
@@ -95,7 +95,7 @@ class Request
     class << self
       def open(host, *args)
         address = IPSocket.getaddress(host)
-        raise Mastodon::HostValidationError if PrivateAddressCheck.private_address? IPAddr.new(address)
+        raise Mastodon::HostValidationError if Rails.configuration.x.http_client_proxy.empty? && PrivateAddressCheck.private_address?(IPAddr.new(address))
         super address, *args
       end
 
