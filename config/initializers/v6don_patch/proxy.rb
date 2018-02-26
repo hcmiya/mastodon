@@ -11,16 +11,13 @@ def parse_proxy(proxy)
 end
 
 Rails.application.configure do
-  config.x.http_client_proxy = {
-    "http" => parse_proxy(ENV['HTTP_PROXY']) || parse_proxy(ENV['http_proxy']) || {},
-    "https" => parse_proxy(ENV['HTTPS_PROXY']) || parse_proxy(ENV['https_proxy']) || {},
-  }
+  config.x.http_client_proxy = parse_proxy(ENV['HTTP_PROXY']) || parse_proxy(ENV['http_proxy']) || {}
 end
 
 module Mastodon::Goldfinger
   def self.fetch(uri)
     ssl = !(/\.(onion|i2p)(:\d+)?$/ === uri)
-    proxy = Rails.configuration.x.http_client_proxy[ssl ? 'https' : 'http']
+    proxy = Rails.configuration.x.http_client_proxy
     proxy[:ssl] = ssl
     ::Goldfinger.finger("acct:#{uri}", proxy)
   end
