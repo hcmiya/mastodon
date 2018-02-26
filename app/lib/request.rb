@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'ipaddr'
-require 'socket'
-
 class Request
   REQUEST_TARGET = '(request-target)'
 
@@ -11,7 +8,7 @@ class Request
   def initialize(verb, url, **options)
     @verb    = verb
     @url     = Addressable::URI.parse(url).normalize
-    @options = options.merge(socket_class: Socket).merge(Rails.configuration.x.http_client_proxy)
+    @options = options.merge(Rails.configuration.x.http_client_proxy)
     @headers = {}
 
     set_common_headers!
@@ -90,18 +87,4 @@ class Request
   def http_client
     HTTP.timeout(:per_operation, timeout).follow(max_hops: 2)
   end
-
-  class Socket < TCPSocket
-    class << self
-      def open(host, *args)
-        address = IPSocket.getaddress(host)
-        raise Mastodon::HostValidationError if Rails.configuration.x.http_client_proxy.empty? && PrivateAddressCheck.private_address?(IPAddr.new(address))
-        super address, *args
-      end
-
-      alias new open
-    end
-  end
-
-  private_constant :Socket
 end
