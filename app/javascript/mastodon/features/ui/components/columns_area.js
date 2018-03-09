@@ -6,6 +6,7 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 
 //import { links, getIndex, getLink } from './tabs_bar';
 import { getIndex } from './tabs_bar';
+import { Link } from 'react-router-dom';
 
 import BundleContainer from '../containers/bundle_container';
 import ColumnLoading from './column_loading';
@@ -154,7 +155,15 @@ export default class ColumnsArea extends ImmutablePureComponent {
     this.pendingIndex = null;
 
     if (singleColumn) {
-      return <div className='columns-area'>{children}</div>;
+      const floatingActionButton = this.context.router.history.location.pathname === '/statuses/new' ? null : <Link key='floating-action-button' to='/statuses/new' className='floating-action-button'><i className='fa fa-pencil' /></Link>;
+
+      return columnIndex !== -1 ? [
+        floatingActionButton,
+      ] : [
+        <div className='columns-area'>{children}</div>,
+
+        floatingActionButton,
+      ];
     }
 
     return (
