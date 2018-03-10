@@ -157,9 +157,7 @@ export default class ColumnsArea extends ImmutablePureComponent {
     if (singleColumn) {
       const floatingActionButton = this.context.router.history.location.pathname === '/statuses/new' ? null : <Link key='floating-action-button' to='/statuses/new' className='floating-action-button'><i className='fa fa-pencil' /></Link>;
 
-      return columnIndex !== -1 ? [
-        floatingActionButton,
-      ] : [
+      return [
         <div className='columns-area'>{children}</div>,
 
         floatingActionButton,
