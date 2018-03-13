@@ -89,7 +89,7 @@ export default class ColumnsArea extends ImmutablePureComponent {
     }
   }
 
-/*
+  /*
   handleSwipe = (index) => {
     this.pendingIndex = index;
 
@@ -149,9 +149,9 @@ export default class ColumnsArea extends ImmutablePureComponent {
 
   render () {
     const { columns, children, singleColumn, isModalOpen } = this.props;
-//    const { shouldAnimate } = this.state;
+    // const { shouldAnimate } = this.state;
 
-//    const columnIndex = getIndex(this.context.router.history.location.pathname);
+    // const columnIndex = getIndex(this.context.router.history.location.pathname);
     this.pendingIndex = null;
 
     if (singleColumn) {

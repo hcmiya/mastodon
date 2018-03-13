@@ -49,7 +49,7 @@ const apply_without_tag = f => (str, rec) => {
       brokentag = true;
     }
     const pretag = str.slice(0, tagbegin);
-    rtn += tagbegin ? depth ? pretag : f(pretag, rec) : '';
+    rtn += tagbegin ? ( depth ? pretag : f(pretag, rec) ) : ''; // eslint-disable-line no-nested-ternary
     if (notag) break;
 
     let tagend = str.indexOf('>', tagbegin + 1) + 1;
@@ -176,16 +176,18 @@ byre.push(...[
         let c;
         if (/^\s/u.test(e.str)) {
           c = e.str;
-        } else switch (e.type) {
-        case 'char':
-        case 'image':
-          c = `<span class="v6don-wave" style="animation-delay: ${delay}ms">${e.str}</span>`;
-          delay += 100;
-          break;
-        case 'tagclose':
-        case 'tagopen':
-          c = e.str;
-          break;
+        } else {
+          switch (e.type) {
+          case 'char':
+          case 'image':
+            c = `<span class="v6don-wave" style="animation-delay: ${delay}ms">${e.str}</span>`;
+            delay += 100;
+            break;
+          case 'tagclose':
+          case 'tagopen':
+            c = e.str;
+            break;
+          }
         }
         rtn += c;
       });
@@ -426,5 +428,5 @@ const highlight = (text, ce = {}) => {
   }
   const rec = text => reclist.reduce((t, f) => f(t), text);
   return trlist.post.reduce((t, f) => f(t), rec(trlist.pre.reduce((t, f) => f(t, rec), text)));
-}
+};
 export default highlight;
