@@ -83,9 +83,9 @@ class Time extends React.PureComponent {
 
   render() {
     const sec = this.props.full ? (<span>
-        <span className='v6don-estclock-tick'>:</span>
-        <span className='v6don-estclock-sec'>{this.ftime('second')}</span>
-      </span>) : null;
+      <span className='v6don-estclock-tick'>:</span>
+      <span className='v6don-estclock-sec'>{this.ftime('second')}</span>
+    </span>) : null;
     return (<time dateTime={this.d.toISOString().replace(/\.\d+/, '')}>
       <span className='v6don-estclock-permin'>{this.fdate()}</span>
       {sec}
@@ -94,15 +94,20 @@ class Time extends React.PureComponent {
 
 }
 
-export default (props) => {
+const ESTClock = props => {
   let pfx_, fullclk_;
   if (props.UTC) {
-    fullclk_ = <Time timeZone='UTC' full={true} />;
+    fullclk_ = <Time timeZone='UTC' full />;
     pfx_ = 'UTC';
   } else {
-    fullclk_ = <Time full={true} />;
+    fullclk_ = <Time full />;
     pfx_ = 'Local';
   }
   const pfx = pfx_, fullclk = fullclk_;
   return (<p className='v6don-estclock'>{pfx}: {fullclk}, <abbr title='Eugen Standard Time'>EST</abbr>: <Time timeZone='Europe/Berlin' /></p>);
-}
+};
+ESTClock.propTypes = {
+  UTC: PropTypes.bool,
+};
+
+export default ESTClock;

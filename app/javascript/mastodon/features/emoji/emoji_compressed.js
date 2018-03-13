@@ -183,8 +183,8 @@ const comptoken = tokens.reduce((comp, tok) => {
 // escape SMP char: \u1Fxxx (4bytes) -> \u0xxx (2-3bytes)
 module.exports = [
   compjson.replace(/[\u{1f100}-\u{1ffff}]/ug, c => String.fromCharCode(c.codePointAt(0) - 0x1f000))
-  .replace(/\u200d/g, '\x05')
-  .replace(/"([\u3400-\u4dbf\u4e00-\u9fff\uac00-\ud7ff\ue000-\ufaff]+)"/g, (all, cjk) => cjk)
-  .replace(/:\[\[\["|,\[\],|"\],\["|"\]\],\["|\]\],/g, m => String.fromCharCode([':[[["', ',[],', '"],["', '"]],["', ']],'].indexOf(m) + 0xe)),
+    .replace(/\u200d/g, '\x05')
+    .replace(/"([\u3400-\u4dbf\u4e00-\u9fff\uac00-\ud7ff\ue000-\ufaff]+)"/g, (all, cjk) => cjk)
+    .replace(/:\[\[\["|,\[\],|"\],\["|"\]\],\["|\]\],/g, m => String.fromCharCode([':[[["', ',[],', '"],["', '"]],["', ']],'].indexOf(m) + 0xe)),
   comptoken,
 ];
