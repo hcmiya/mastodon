@@ -28,6 +28,8 @@ const componentMap = {
   'LIST': ListTimeline,
 };
 
+const shouldHideFAB = path => path.match(/^\/statuses\//);
+
 @component => injectIntl(component, { withRef: true })
 export default class ColumnsArea extends ImmutablePureComponent {
 
@@ -155,7 +157,7 @@ export default class ColumnsArea extends ImmutablePureComponent {
     this.pendingIndex = null;
 
     if (singleColumn) {
-      const floatingActionButton = this.context.router.history.location.pathname === '/statuses/new' ? null : <Link key='floating-action-button' to='/statuses/new' className='floating-action-button'><i className='fa fa-pencil' /></Link>;
+      const floatingActionButton = shouldHideFAB(this.context.router.history.location.pathname) ? null : <Link key='floating-action-button' to='/statuses/new' className='floating-action-button'><i className='fa fa-pencil' /></Link>;
 
       return [
         <div className='columns-area'>{children}</div>,
