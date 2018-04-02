@@ -55,7 +55,6 @@ class Account < ApplicationRecord
   include AccountHeader
   include AccountInteractions
   include Attachmentable
-  include Remotable
   include Paginable
 
   enum protocol: [:ostatus, :activitypub]
@@ -134,7 +133,9 @@ class Account < ApplicationRecord
            prefix: true,
            allow_nil: true
 
-  delegate :filtered_languages, to: :user, prefix: false, allow_nil: true
+  def filtered_languages
+    nil
+  end
 
   def local?
     domain.nil?

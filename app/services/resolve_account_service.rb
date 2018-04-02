@@ -23,7 +23,7 @@ class ResolveAccountService < BaseService
 
     Rails.logger.debug "Looking up webfinger for #{uri}"
 
-    @webfinger = Mastodon::Goldfinger.fetch(uri)
+    @webfinger = Goldfinger.finger("acct:#{uri}")
 
     confirmed_username, confirmed_domain = @webfinger.subject.gsub(/\Aacct:/, '').split('@')
 
@@ -179,11 +179,10 @@ class ResolveAccountService < BaseService
   def atom_body
     return @atom_body if defined?(@atom_body)
 
-    response = Request.new(:get, atom_url).perform
-
-    raise Mastodon::UnexpectedResponseError, response unless response.code == 200
-
-    @atom_body = response.to_s
+    @atom_body = Request.new(:get, atom_url).perform do |response|
+      raise Mastodon::UnexpectedResponseError, response unless response.code == 200
+      response.body_with_limit
+    end
   end
 
   def actor_json

@@ -28,12 +28,12 @@ class ActivityPub::FetchRemoteAccountService < BaseService
   private
 
   def verified_webfinger?
-    webfinger                            = Mastodon::Goldfinger.fetch("#{@username}@#{@domain}")
+    webfinger                            = Goldfinger.finger("acct:#{@username}@#{@domain}")
     confirmed_username, confirmed_domain = split_acct(webfinger.subject)
 
     return webfinger.link('self')&.href == @uri if @username.casecmp(confirmed_username).zero? && @domain.casecmp(confirmed_domain).zero?
 
-    webfinger                            = Mastodon::Goldfinger.fetch("#{confirmed_username}@#{confirmed_domain}")
+    webfinger                            = Goldfinger.finger("acct:#{confirmed_username}@#{confirmed_domain}")
     @username, @domain                   = split_acct(webfinger.subject)
     self_reference                       = webfinger.link('self')
 
