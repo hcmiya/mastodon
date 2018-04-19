@@ -246,8 +246,8 @@ ja:
         title: フィルター
       title: 招待
     report_notes:
-      created_msg: モデレーションメモを書き込みました！
-      destroyed_msg: モデレーションメモを削除しました！
+      created_msg: モデレーションメモを書き込みました
+      destroyed_msg: モデレーションメモを削除しました
     reports:
       action_taken_by: レポート処理者
       are_you_sure: 本当に実行しますか?
@@ -274,7 +274,7 @@ ja:
       reported_account: 報告対象アカウント
       reported_by: 報告者
       resolved: 解決済み
-      resolved_msg: レポートを解決済みにしました！
+      resolved_msg: レポートを解決済みと処理しました
       silence_account: アカウントをサイレンス
       status: ステータス
       statuses: 通報されたトゥート
@@ -296,7 +296,7 @@ ja:
         email: ビジネスメールアドレス
         username: 連絡先のユーザー名
       hero:
-        desc_html: フロントページに表示されます。サイズは600x100px以上推奨です。未設定の場合、インスタンスのサムネイルが使用されます
+        desc_html: フロントページに表示されます。サイズは600×100px以上推奨です。未設定の場合、インスタンスのサムネイルが使用されます
         title: ヒーローイメージ
       peers_api_enabled:
         desc_html: 連合内でこのインスタンスが遭遇したドメインの名前
@@ -584,16 +584,16 @@ ja:
     web: ウェブ
   push_notifications:
     favourite:
-      title: あなたのトゥートが %{name} さんにお気に入り登録されました
+      title: あなたのトゥートが%{name}さんにお気に入り登録されました
     follow:
-      title: "%{name} さんにフォローされました"
+      title: "%{name}さんにフォローされました"
     group:
-      title: "%{count} 件の通知"
+      title: "%{count}件の通知"
     mention:
       action_boost: ブースト
       action_expand: もっと見る
       action_favourite: お気に入り
-      title: "%{name} さんから返信がありました"
+      title: "%{name}さんから返信がありました"
     reblog:
       title: あなたのトゥートが %{name} さんにブーストされました
   remote_follow:
@@ -661,11 +661,11 @@ ja:
     attached:
       description: '添付: %{attached}'
       image:
-        one: "%{count} 枚の画像"
-        other: "%{count} 枚の画像"
+        one: "%{count}枚の画像"
+        other: "%{count}枚の画像"
       video:
-        one: "%{count} 本の動画"
-        other: "%{count} 本の動画"
+        one: "%{count}本の動画"
+        other: "%{count}本の動画"
     content_warning: '閲覧注意: %{warning}'
     open_in_web: Webで開く
     over_character_limit: 上限は%{max}文字までです
@@ -689,7 +689,7 @@ ja:
     reblogged: さんがブースト
     sensitive_content: 閲覧注意
   terms:
-    title: "%{instance} 利用規約・プライバシーポリシー"
+    title: "%{instance}利用規約・プライバシーポリシー"
   themes:
     default: Mastodon
   time:
@@ -713,7 +713,7 @@ ja:
     wrong_code: コードが間違っています。サーバー上の時間とデバイス上の時間が一致していることを確認してください。
   user_mailer:
     backup_ready:
-      explanation: Mastodonアカウントのアーカイブを受け付けました。今すぐダウンロードできます！
+      explanation: Mastodonアカウントのアーカイブを受け付けました。今すぐダウンロードできます!
       subject: アーカイブの準備ができました
       title: アーカイブの取り出し
     welcome:
@@ -721,19 +721,19 @@ ja:
       edit_profile_step: アバター画像やヘッダー画像をアップロードしたり、表示名やその他プロフィールを変更しカスタマイズすることができます。新しいフォロワーからのフォローを許可する前に検討したい場合、アカウントを非公開にすることができます。
       explanation: 始めるにあたってのアドバイスです
       final_action: 始めましょう
-      final_step: 'さあ始めましょう！ たとえフォロワーがいなくても、あなたの公開した投稿はローカルタイムラインやハッシュタグなどで誰かの目に止まるかもしれません。自己紹介をしたい時は #introductions ハッシュタグを使うといいかもしれません。'
+      final_step: 'さあ始めましょう! たとえフォロワーがいなくても、あなたの公開した投稿はローカルタイムラインやハッシュタグなどで誰かの目に止まるかもしれません。自己紹介をしたい時は #introductions ハッシュタグを使うといいかもしれません。'
       full_handle: あなたの正式なユーザー名
       full_handle_hint: これは別のインスタンスからフォローしてもらったりメッセージのやり取りをする際に、友達に伝えるといいでしょう。
       review_preferences_action: 設定の変更
       review_preferences_step: 受け取りたいメールや投稿の公開範囲などの設定を必ず行ってください。不快でないならアニメーション GIF の自動再生を有効にすることもできます。
       subject: Mastodon へようこそ
-      tip_bridge_html: もし Twitter から来られたのであれば、<a href="%{bridge_url}">bridge app</a> を使用することで Mastodon での友達のアカウントを探すこともできます。ただし bridge app を使用したことのある相手に限ります！
+      tip_bridge_html: もし Twitter から来られたのであれば、<a href="%{bridge_url}">bridge app</a> を使用することで Mastodon での友達のアカウントを探すこともできます。ただし bridge app を使用したことのある相手に限ります!
       tip_federated_timeline: 連合タイムラインは Mastodon ネットワークの流れを見られるものです。ただしあなたと同じインスタンスの人がフォローしている人だけが含まれるので、それが全てではありません。
       tip_following: 標準では自動でインスタンスの管理者をフォローしています。もっと興味のある人たちを見つけるには、ローカルタイムラインと連合タイムラインを確認してください。
-      tip_local_timeline: ローカルタイムラインは %{instance} にいる人々の流れを見られるものです。彼らはあなたと同じインスタンスにいる隣人のようなものです！
-      tip_mobile_webapp: もしモバイル端末のブラウザで Mastodon をホーム画面に追加できる場合、プッシュ通知を受け取ることができます。それはまるでネイティブアプリのように動作します！
+      tip_local_timeline: ローカルタイムラインは %{instance} にいる人々の流れを見られるものです。彼らはあなたと同じインスタンスにいる隣人のようなものです!
+      tip_mobile_webapp: もしモバイル端末のブラウザで Mastodon をホーム画面に追加できる場合、プッシュ通知を受け取ることができます。それはまるでネイティブアプリのように動作します!
       tips: 豆知識
-      title: ようこそ、%{name} ！
+      title: ようこそ、%{name}!
   users:
     invalid_email: メールアドレスが無効です
     invalid_otp_token: 二段階認証コードが間違っています
