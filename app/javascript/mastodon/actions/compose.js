@@ -152,6 +152,8 @@ export function submitCompose() {
       if (response.data.in_reply_to_id === null && response.data.visibility === 'public') {
         insertIfOnline('community');
         insertIfOnline('public');
+      } else if (response.data.visibility === 'direct') {
+        insertIfOnline('direct');
       }
     }).catch(function (error) {
       dispatch(submitComposeFail(error));
@@ -460,11 +462,12 @@ export function changeComposeVisibility(value) {
   };
 };
 
-export function insertEmojiCompose(position, emoji) {
+export function insertEmojiCompose(position, emoji, needsSpace) {
   return {
     type: COMPOSE_EMOJI_INSERT,
     position,
     emoji,
+    needsSpace,
   };
 };
 
