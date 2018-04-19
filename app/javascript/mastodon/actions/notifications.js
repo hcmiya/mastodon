@@ -9,7 +9,8 @@ import {
 } from './importer';
 import { defineMessages } from 'react-intl';
 
-export const NOTIFICATIONS_UPDATE = 'NOTIFICATIONS_UPDATE';
+export const NOTIFICATIONS_UPDATE      = 'NOTIFICATIONS_UPDATE';
+export const NOTIFICATIONS_UPDATE_NOOP = 'NOTIFICATIONS_UPDATE_NOOP';
 
 export const NOTIFICATIONS_EXPAND_REQUEST = 'NOTIFICATIONS_EXPAND_REQUEST';
 export const NOTIFICATIONS_EXPAND_SUCCESS = 'NOTIFICATIONS_EXPAND_SUCCESS';
@@ -39,20 +40,29 @@ const unescapeHTML = (html) => {
 
 export function updateNotifications(notification, intlMessages, intlLocale) {
   return (dispatch, getState) => {
-    const playSound = getState().getIn(['settings', 'notifications', 'sounds', notification.type], true);
+    const showInColumn = getState().getIn(['settings', 'notifications', 'shows', notification.type], true);
+    const playSound    = getState().getIn(['settings', 'notifications', 'sounds', notification.type], true);
 
-    dispatch(importFetchedAccount(notification.account));
-    if (notification.status) {
-      dispatch(importFetchedStatus(notification.status));
+    if (showInColumn) {
+      dispatch(importFetchedAccount(notification.account));
+
+      if (notification.status) {
+        dispatch(importFetchedStatus(notification.status));
+      }
+
+      dispatch({
+        type: NOTIFICATIONS_UPDATE,
+        notification,
+        meta: playSound ? { sound: 'paro' } : undefined,
+      });
+
+      fetchRelatedRelationships(dispatch, [notification]);
+    } else if (playSound) {
+      dispatch({
+        type: NOTIFICATIONS_UPDATE_NOOP,
+        meta: { sound: 'paro' },
+      });
     }
-
-    dispatch({
-      type: NOTIFICATIONS_UPDATE,
-      notification,
-      meta: playSound ? { sound: 'paro' } : undefined,
-    });
-
-    fetchRelatedRelationships(dispatch, [notification]);
   };
 };
 
