@@ -104,7 +104,15 @@ const ESTClock = props => {
     pfx_ = 'Local';
   }
   const pfx = pfx_, fullclk = fullclk_;
-  return (<p className='v6don-estclock'>{pfx}: {fullclk}, <abbr title='Eugen Standard Time'>EST</abbr>: <Time timeZone='Europe/Berlin' /></p>);
+  const eugentz = 'Europe/Berlin';
+  let rtn;
+  try {
+    void(new Intl.DateTimeFormat('en', { year: 'numeric', timeZone: eugentz }));
+    rtn = (<p className='v6don-estclock'>{pfx}: {fullclk}, <abbr title='Eugen Standard Time'>EST</abbr>: <Time timeZone={eugentz} /></p>);
+  } catch (e) {
+    rtn = (<p className='v6don-estclock'>{pfx}: {fullclk}</p>);
+  }
+  return rtn;
 };
 ESTClock.propTypes = {
   UTC: PropTypes.bool,
