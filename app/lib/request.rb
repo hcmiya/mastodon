@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'ipaddr'
+require 'socket'
+
 class Request
   REQUEST_TARGET = '(request-target)'
 
@@ -8,9 +11,10 @@ class Request
   def initialize(verb, url, **options)
     @verb    = verb
     @url     = Addressable::URI.parse(url).normalize
-    @options = options.merge(Rails.configuration.x.http_client_proxy)
+    @options = options.merge(use_proxy? ? Rails.configuration.x.http_client_proxy : { socket_class: Socket })
     @headers = {}
 
+    raise Mastodon::HostValidationError, 'Instance does not support hidden service connections' if block_hidden_service?
     set_common_headers!
     set_digest! if options.key?(:body)
   end
@@ -76,7 +80,7 @@ class Request
   end
 
   def user_agent
-    @user_agent ||= "curl/7.57.0"
+    @user_agent ||= "#{HTTP::Request::USER_AGENT} (Mastodon/#{Mastodon::Version}; +#{root_url})"
   end
 
   def key_id
@@ -89,11 +93,19 @@ class Request
   end
 
   def timeout
-    { write: 20, connect: 15, read: 20 }
+    { write: 10, connect: 10, read: 10 }
   end
 
   def http_client
     @http_client ||= HTTP.timeout(:per_operation, timeout).follow(max_hops: 2)
+  end
+
+  def use_proxy?
+    Rails.configuration.x.http_client_proxy.present?
+  end
+
+  def block_hidden_service?
+    !Rails.configuration.x.access_to_hidden_service && /\.(onion|i2p)$/.match(@url.host)
   end
 
   module ClientLimit
@@ -124,6 +136,27 @@ class Request
   end
 
   class Socket < TCPSocket
+    class << self
+      def open(host, *args)
+        return super host, *args if thru_hidden_service? host
+        outer_e = nil
+        Addrinfo.foreach(host, nil, nil, :SOCK_STREAM) do |address|
+          begin
+            raise Mastodon::HostValidationError if PrivateAddressCheck.private_address? IPAddr.new(address.ip_address)
+            return super address.ip_address, *args
+          rescue => e
+            outer_e = e
+          end
+        end
+        raise outer_e if outer_e
+      end
+
+      alias new open
+
+      def thru_hidden_service?(host)
+        Rails.configuration.x.hidden_service_via_transparent_proxy && /\.(onion|i2p)$/.match(host)
+      end
+    end
   end
 
   private_constant :ClientLimit, :Socket

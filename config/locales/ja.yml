@@ -68,7 +68,7 @@ ja:
         current_email: 現在のメールアドレス
         label: メールアドレスを変更
         new_email: 新しいメールアドレス
-        submit: Change Email
+        submit: メールアドレスの変更
         title: "%{username} さんのメールアドレスを変更"
       confirm: 確認
       confirmed: 確認済み
@@ -259,16 +259,17 @@ ja:
       created_msg: レポートメモを書き込みました
       destroyed_msg: レポートメモを削除しました
     reports:
+      account:
+        note: メモ
+        report: レポート
       action_taken_by: レポート処理者
       are_you_sure: 本当に実行しますか?
       assign_to_self: 担当になる
       assigned: 担当者
       comment:
-        label: コメント
         none: なし
       created_at: レポート日時
       delete: 削除
-      history: モデレーション履歴
       id: ID
       mark_as_resolved: 解決済みとしてマーク
       mark_as_unresolved: 未解決として再び開く
@@ -277,8 +278,6 @@ ja:
         create_and_resolve: 書き込み、解決済みにする
         create_and_unresolve: 書き込み、未解決として開く
         delete: 削除
-        label: モデレーターメモ
-        new_label: モデレーターメモの追加
         placeholder: このレポートに取られた措置やその他更新を記述してください
       nsfw:
         'false': NSFW オフ
@@ -292,7 +291,6 @@ ja:
       resolved_msg: レポートを解決済みと処理しました
       silence_account: アカウントをサイレンス
       status: ステータス
-      statuses: 通報されたトゥート
       suspend_account: アカウントを停止
       target: ターゲット
       title: レポート
