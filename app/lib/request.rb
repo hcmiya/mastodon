@@ -9,12 +9,15 @@ class Request
   include RoutingHelper
 
   def initialize(verb, url, **options)
+    raise ArgumentError if url.blank?
+
     @verb    = verb
     @url     = Addressable::URI.parse(url).normalize
     @options = options.merge(use_proxy? ? Rails.configuration.x.http_client_proxy : { socket_class: Socket })
     @headers = {}
 
     raise Mastodon::HostValidationError, 'Instance does not support hidden service connections' if block_hidden_service?
+
     set_common_headers!
     set_digest! if options.key?(:body)
   end
@@ -54,10 +57,11 @@ class Request
   private
 
   def set_common_headers!
-    @headers[REQUEST_TARGET] = "#{@verb} #{@url.path}"
-    @headers['User-Agent']   = user_agent
-    @headers['Host']         = @url.host
-    @headers['Date']         = Time.now.utc.httpdate
+    @headers[REQUEST_TARGET]    = "#{@verb} #{@url.path}"
+    @headers['User-Agent']      = user_agent
+    @headers['Host']            = @url.host
+    @headers['Date']            = Time.now.utc.httpdate
+    @headers['Accept-Encoding'] = 'gzip' if @verb != :head
   end
 
   def set_digest!
@@ -97,7 +101,7 @@ class Request
   end
 
   def http_client
-    @http_client ||= HTTP.timeout(:per_operation, timeout).follow(max_hops: 2)
+    @http_client ||= HTTP.use(:auto_inflate).timeout(:per_operation, timeout).follow(max_hops: 2)
   end
 
   def use_proxy?

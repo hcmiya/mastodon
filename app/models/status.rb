@@ -31,6 +31,10 @@ class Status < ApplicationRecord
   include Cacheable
   include StatusThreadingConcern
 
+  # If `override_timestamps` is set at creation time, Snowflake ID creation
+  # will be based on current time instead of `created_at`
+  attr_accessor :override_timestamps
+
   update_index('statuses#status', :proper) if Chewy.enabled?
 
   enum visibility: [:public, :unlisted, :private, :direct], _suffix: :visibility
@@ -160,7 +164,7 @@ class Status < ApplicationRecord
   end
 
   def emojis
-    CustomEmoji.from_text([spoiler_text, text].join(' '), account.domain)
+    @emojis ||= CustomEmoji.from_text([spoiler_text, text].join(' '), account.domain)
   end
 
   after_create_commit :store_uri, if: :local?

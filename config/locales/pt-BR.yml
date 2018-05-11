@@ -53,9 +53,7 @@ pt-BR:
     unfollow: Deixar de seguir
   admin:
     account_moderation_notes:
-      account: Moderador
-      create: Criar
-      created_at: Data
+      create: Criar uma advertência
       created_msg: Nota de moderação criada com sucesso!
       delete: Excluir
       destroyed_msg: Nota de moderação excluída com sucesso!
@@ -72,6 +70,7 @@ pt-BR:
         title: Mudar e-mail para %{username}
       confirm: Confirmar
       confirmed: Confirmado
+      confirming: Confirmando
       demote: Rebaixar
       disable: Desativar
       disable_two_factor_authentication: Desativar 2FA
@@ -80,6 +79,7 @@ pt-BR:
       domain: Domínio
       edit: Editar
       email: E-mail
+      email_status: Estado del correo electrónico
       enable: Ativar
       enabled: Ativado
       feed_url: URL do feed
@@ -118,6 +118,10 @@ pt-BR:
       push_subscription_expires: Inscrição PuSH expira
       redownload: Atualizar avatar
       remove_avatar: Remover avatar
+      resend_confirmation:
+        already_confirmed: Este usuario ya está confirmado
+        send: Reenviar el correo electrónico de confirmación
+        success: "¡Correo electrónico de confirmación enviado con éxito!"
       reset: Anular
       reset_password: Modificar senha
       resubscribe: Reinscrever-se
@@ -269,7 +273,6 @@ pt-BR:
       comment:
         none: Nenhum
       created_at: Denunciado
-      delete: Excluir
       id: ID
       mark_as_resolved: Marcar como resolvido
       mark_as_unresolved: Marcar como não resolvido
@@ -279,9 +282,6 @@ pt-BR:
         create_and_unresolve: Reabrir com nota
         delete: Excluir
         placeholder: Descreva que ações foram tomadas, ou quaisquer atualizações sobre esta denúncia…
-      nsfw:
-        'false': Mostrar mídias anexadas
-        'true': Esconder mídias anexadas
       reopen: Reabrir denúncia
       report: 'Denúncia #%{id}'
       report_contents: Conteúdos
@@ -354,13 +354,10 @@ pt-BR:
       back_to_account: Voltar para página da conta
       batch:
         delete: Deletar
-        nsfw_off: NSFW ATIVADO
-        nsfw_on: NSFW DESATIVADO
-      execute: Executar
+        nsfw_off: Marcar como não-sensível
+        nsfw_on: Marcar como sensível
       failed_to_execute: Falha em executar
       media:
-        hide: Esconder mídia
-        show: Mostrar mídia
         title: Mídia
       no_media: Não há mídia
       title: Postagens da conta
@@ -376,6 +373,7 @@ pt-BR:
   admin_mailer:
     new_report:
       body: "%{reporter} denunciou %{target}"
+      body_remote: Alguém da instância %{domain} reportou %{target}
       subject: Nova denúncia sobre %{instance} (#%{id})
   application_mailer:
     notification_preferences: Mudar preferências de e-mail
@@ -465,7 +463,7 @@ pt-BR:
     archive_takeout:
       date: Data
       download: Baixe o seu arquivo
-      hint_html: Você pode pedir um arquivo dos seus <strong>toots e mídia enviada</strong>. Os dados exportados estarão no formato ActivityPub, que podem ser lidos por qualquer software compatível.
+      hint_html: Você pode pedir um arquivo dos seus <strong>toots e mídia enviada</strong>. Os dados exportados estarão no formato ActivityPub, que podem ser lidos por qualquer software compatível. Você pode pedir um arquivo a cada 7 dias.
       in_progress: Preparando seu arquivo...
       request: Solicitar o seu arquivo
       size: Tamanho
@@ -683,6 +681,9 @@ pt-BR:
         one: "%{count} vídeo"
         other: "%{count} vídeos"
     content_warning: 'Aviso de conteúdo: %{warning}'
+    disallowed_hashtags:
+      one: 'continha a hashtag não permitida: %{tags}'
+      other: 'continha as hashtags não permitidas: %{tags}'
     open_in_web: Abrir na web
     over_character_limit: limite de caracteres de %{max} excedido
     pin_errors:
@@ -705,8 +706,86 @@ pt-BR:
     reblogged: compartilhou
     sensitive_content: Conteúdo sensível
   terms:
+    body_html: |
+      <h2>Política de privacidade</h2>
+      <h3 id="collect">Que informação nós coletamos?</h3>
+
+      <ul>
+        <li><em>Informação básica de conta</em>: Se você se registrar nesse servidor, podemos pedir que você utilize um nome de usuário, um e-mail e uma senha. Você também pode adicionar informações extras como um nome de exibição e biografia; enviar uma imagem de perfil e imagem de cabeçalho. O nome de usuário, nome de exibição, biografia, imagem de perfil e imagem de cabeçalho são sempre listadas publicamente.</li>
+        <li><em>Posts, informação de seguidores e outras informações públicas</em>: A lista de pessoas que você segue é listada publicamente, o mesmo é verdade para quem te segue. Quando você envia uma mensagem, a data e o horário são armazenados, assim como a aplicação que você usou para enviar a mensagem. Mensagens podem conter mídias anexadas, como imagens e vídeos. Posts públicos e não-listados estão disponíveis publicamente. Quando você destaca um post no seu perfil, isso também é uma informação pública. Seus posts são entregues aos seus seguidores e em alguns casos isso significa que eles são enviados para servidores diferentes e cópias são armazenadas nesses servidores. Quando você remove posts, essa informação também é entregue aos seus seguidores. O ato de compartilhar ou favoritar um outro post é sempre público.<li>
+        <li><em>Mensagens diretas e posts somente para seguidores</em>: Todos os posts são armazenados e processados no servidor. Posts somente para seguidores são entregues aos seus seguidores e usuários que são mencionados neles; mensagens diretas são entregues somente aos usuários mencionados nelas. Em alguns casos isso significa que as mensagens são entregues para servidores diferentes e cópias são armazenadas nesses servidores. Nós fazemos esforços substanciais para limitar o acesso dessas mensagens somente para as pessoas autorizadas, mas outros servidores podem não fazer o mesmo. É importante portanto revisar os servidores à qual seus seguidores pertencem. Você pode usar uma opção para aprovar ou rejeitar novos seguidores manualmente nas configurações. <em>Por favor tenha em mente que os operadores do servidor e de qualquer servidores do destinatário podem ver tais mensagens</em>, e que os destinatários podem fazer capturas de tela, copiar ou de outra maneira compartilhar as mensagens. <em>Não compartilhe informação confidencial pelo Mastodon.</em></li>
+        <li><em>IPs e outros metadados</em>: Quando você faz se autentica, nos guardamos o endereço de IP que você usou ao se autenticar e o nome do seu navegador da internet. Todas as sessões autenticadas são disponíveis para serem analisadas e revogadas nas configurações. O último endereço de IP usado é guardado por até 12 meses. Nós também podemos reter históricos do servidor que incluem o endereço de IP de todas as requisições ao nosso servidor.</li>
+      </ul>
+
+      <hr class="spacer" />
+
+      <h3 id="use">Para que usamos os seus dados?</h3>
+
+      <p>Toda informação que coletamos de você pode ser usada das seguintes maneiras:</p>
+
+      <ul>
+        <li>Para prover a funcionalidade básica do Mastodon. Você só pode interagir com o conteúdo de outras pessoas e postar seu próprio conteúdo estando autenticado. Por exemplo, você pode seguir outras pessoas para ver seus posts combinados na sua linha do tempo personalizada.</li>
+        <li>Para auxiliar na moderação da comunidade, por exemplo ao comparar o seu endereço de IP com outros endereços de IP conhecidos para determinar evasão de banimento e outras violações.</li>
+        <li>O endereço de email que você prover pode ser usado para lhe enviar informação, notificação sobre outras pessoas interagindo com o seu conteúdo ou lhe enviando mensagens e para responder a questões ou outros pedidos.</li>
+      </ul>
+
+      <hr class="spacer" />
+
+      <h3 id="protect">Como protegemos as suas informações?</h3>
+
+      <p>Nós implementamos diversas medidas de segurança para manter a segurança das suas informações pessoais quando você as acessa ou as envia. Entre outras coisas, sua sessão do navegador, bem como o tráfego entre as aplicações e a API são asseguradas usando SSL e a sua senha é guardada usando um algoritmo forte de encriptação de mão única. Você pode ativar autenticação em dois fatores como forma de aumentar a segurança no acesso à sua conta.</p>
+
+      <hr class="spacer" />
+
+      <h3 id="data-retention">Qual é a nossa política de retenção de dados?</h3>
+
+      <p>Nós fazemos esforços substanciais para:</p>
+
+      <ul>
+        <li>Reter o histórico do servidor contendo os endereços de IP de todas as requisições feitas à esse servidor, e com respeito a quanto tempo esses logs são retidos, não mais que 90 dias.</li>
+        <li>Reter o endereço de IP associado com usuários registrados não mais que 12 meses.</li>
+      </ul>
+
+      <p>Você pode pedir e fazer o download de um arquivo de todo o conteúdo da sua conta, incluindo as suas mensagens, suas mídias anexadas, imagem de perfil e imagem de topo.</p>
+
+      <p>Você pode remover irreversivelmente a sua conta a qualquer momento.</p>
+
+      <hr class="spacer"/>
+
+      <h3 id="cookies">Nós usamos cookies?</h3>
+
+      <p>Sim. Cookies são pequenos arquivos que um site ou serviço transfere ao seu disco rígido do seu computador através do seu navegador da web (se você permitir). Esses cookies permitem ao site conhecer seu navegador e, se você tiver uma conta registrada, associá-lo a sua conta.</p>
+
+      <p>Nós usamos cookies para compreender e salvar suas preferências para visitas futuras.</p>
+
+      <hr class="spacer" />
+
+      <h3 id="disclose">Nós compartilhamos qualquer informação para terceiros?</h3>
+
+      <p>Nós não vendemos, trocamos ou transferimos de qualquer maneira informação que pode lhe identificar à terceiros. Isso não inclui terceiros que podemos nos auxiliam a operar o nosso site, realizar nossos negócios ou lhe prestar serviços, contanto que esses terceiros se comprometam a manter essa informação confidencial. Nós podemos também divulgar informação quando acreditamos que é apropriado para obedecer a lei, para fazer cumprir nossas políticas ou proteger nossos direitos, propriedade ou segurança ou o direito, propriedade e segurança de outrem.</p>
+
+      <p>Seu conteúdo público pode ser descarregado por outros servidores na rede. Suas mensagens públicas e somente para seus seguidores são entregues aos servidores onde seus seguidores resides e as suas mensagens diretas são entregues ao servidor dos usuários mencionados nelas, contanto que esses seguidores ou usuários residam em um servidor diferente deste.</p>
+
+      <p>Quando você autoriza uma aplicação a usar sua conta, dependendo do escopo de permissões que você aprovar, a aplicação pode acessar sua informação pública, a lista de usuários que você segue, seus seguidores, suas listas, suas mensagens e suas mensagens favoritas. Aplicações nunca podem acessar o seu endereço de e-mail ou senha.</p>
+
+      <hr class="spacer" />
+
+      <h3 id="coppa">Conformidade com a COPPA (Children's Online Privacy Protection Act)</h3>
+
+      <p>Nosso site, produto e serviços são direcionados à pessoas que tem ao menos 13 anos de idade. Se esse servidor está hospedado nos EUA e você tem menos de 13 anos, de acordo com os requerimentos da COPPA (<a href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Children's Online Privacy Protection Act</a>) não use este site.</p>
+
+      <hr class="spacer" />
+
+      <h3 id="changes">Mudanças à nossa política de privacidade</h3>
+
+      <p>Se decidirmos mudar nossa política de privacidade, nós iremos disponibilizar as mudanças nesta página.</p>
+
+      <p>Este documento é CC-BY-SA. Ele foi atualizado pela última vez em 7 de março de 2018.</p>
+
+      <p>Adaptado originalmente a partir da <a href="https://github.com/discourse/discourse">política de privacidade Discourse</a>.</p>
     title: "%{instance} Termos de Serviço e Política de Privacidade"
   themes:
+    contrast: Alto contraste
     default: Mastodon
   time:
     formats:
@@ -753,5 +832,6 @@ pt-BR:
   users:
     invalid_email: O endereço de e-mail é inválido
     invalid_otp_token: Código de autenticação inválido
+    otp_lost_help_html: Se você perder o acesso à ambos, você pode entrar em contato com %{email}
     seamless_external_login: Você está logado usando um serviço externo, então configurações de e-mail e password não estão disponíveis.
     signed_in_as: 'Acesso como:'

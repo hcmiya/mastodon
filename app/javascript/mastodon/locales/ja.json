@@ -1,4 +1,5 @@
 {
+  "account.badges.bot": "Bot",
   "account.block": "@{name}さんをブロック",
   "account.block_domain": "{domain}全体を非表示",
   "account.blocked": "ブロック済み",
@@ -40,7 +41,7 @@
   "bundle_modal_error.retry": "再試行",
   "column.blocks": "ブロックしたユーザー",
   "column.community": "ローカルタイムライン",
-  "column.direct": "Direct messages",
+  "column.direct": "ダイレクトメッセージ",
   "column.domain_blocks": "非表示にしたドメイン",
   "column.favourites": "お気に入り",
   "column.follow_requests": "フォローリクエスト",

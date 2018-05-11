@@ -40,7 +40,7 @@ ja:
     following: フォロー中
     media: メディア
     moved_html: "%{name}さんは引っ越しました %{new_profile_link}:"
-    nothing_here: 何もありません!
+    nothing_here: 何もありません
     people_followed_by: "%{name}さんがフォロー中のアカウント"
     people_who_follow: "%{name}さんをフォロー中のアカウント"
     posts: トゥート
@@ -53,10 +53,8 @@ ja:
     unfollow: フォロー解除
   admin:
     account_moderation_notes:
-      account: モデレータ
       create: 書き込む
-      created_at: 日付
-      created_msg: モデレーションメモを書き込みました!
+      created_msg: モデレーションメモを書き込みました
       delete: 削除
       destroyed_msg: モデレーションメモを削除しました!
     accounts:
@@ -64,7 +62,7 @@ ja:
       avatar: アイコン
       by_domain: ドメイン
       change_email:
-        changed_msg: メールアドレスの変更に成功しました！
+        changed_msg: メールアドレスの変更に成功しました
         current_email: 現在のメールアドレス
         label: メールアドレスを変更
         new_email: 新しいメールアドレス
@@ -72,14 +70,16 @@ ja:
         title: "%{username} さんのメールアドレスを変更"
       confirm: 確認
       confirmed: 確認済み
+      confirming: 確認中
       demote: 降格
       disable: 無効化
-      disable_two_factor_authentication: 二段階認証を無効にする
+      disable_two_factor_authentication: 二要素認証を無効にする
       disabled: 無効
       display_name: 表示名
       domain: ドメイン
       edit: 編集
       email: メールアドレス
+      email_status: メールアドレスの状態
       enable: 有効化
       enabled: 有効
       feed_url: フィードURL
@@ -118,6 +118,10 @@ ja:
       push_subscription_expires: PuSH購読期限
       redownload: アバターの更新
       remove_avatar: アイコンを削除
+      resend_confirmation:
+        already_confirmed: メールアドレス確認済み
+        send: 確認メールを再送
+        success: 確認メールを再送信しました
       reset: リセット
       reset_password: パスワード再設定
       resubscribe: 再講読
@@ -146,34 +150,34 @@ ja:
       web: Web
     action_logs:
       actions:
-        assigned_to_self_report: "%{name} さんがレポート %{target} を自身の担当に割り当てました"
-        change_email_user: "%{name} さんが %{target} さんのメールアドレスを変更しました"
-        confirm_user: "%{name} さんが %{target} さんのメールアドレスを確認済みにしました"
-        create_custom_emoji: "%{name} さんがカスタム絵文字 %{target} を追加しました"
-        create_domain_block: "%{name} さんがドメイン %{target} をブロックしました"
-        create_email_domain_block: "%{name} さんがドメイン %{target} をメールアドレス用ブラックリストに追加しました"
-        demote_user: "%{name} さんが %{target} さんを降格しました"
-        destroy_domain_block: "%{name} さんがドメイン %{target} のブロックを外しました"
-        destroy_email_domain_block: "%{name} さんがドメイン %{target} をメールアドレス用ブラックリストから外しました"
-        destroy_status: "%{name} さんが %{target} さんの投稿を削除しました"
-        disable_2fa_user: "%{name} さんが %{target} さんの二段階認証を無効化しました"
-        disable_custom_emoji: "%{name} さんがカスタム絵文字 %{target} を無効化しました"
-        disable_user: "%{name} さんが %{target} さんのログインを無効化しました"
-        enable_custom_emoji: "%{name} さんがカスタム絵文字 %{target} を有効化しました"
-        enable_user: "%{name} さんが %{target} さんのログインを有効化しました"
-        memorialize_account: "%{name} さんが %{target} さんを追悼アカウントページに登録しました"
-        promote_user: "%{name} さんが %{target} さんを昇格しました"
-        remove_avatar_user: "%{name} さんが %{target} さんのアイコンを削除しました"
-        reopen_report: "%{name} さんがレポート %{target} を再び開きました"
-        reset_password_user: "%{name} さんが %{target} さんのパスワードをリセットしました"
-        resolve_report: "%{name} さんがレポート %{target} を解決済みにしました"
-        silence_account: "%{name} さんが %{target} さんをサイレンスにしました"
-        suspend_account: "%{name} さんが %{target} さんを停止しました"
-        unassigned_report: "%{name} さんがレポート %{target} の担当を外しました"
-        unsilence_account: "%{name} さんが %{target} さんのサイレンスを解除しました"
-        unsuspend_account: "%{name} さんが %{target} さんの停止を解除しました"
-        update_custom_emoji: "%{name} さんがカスタム絵文字 %{target} を更新しました"
-        update_status: "%{name} さんが %{target} さんの投稿を更新しました"
+        assigned_to_self_report: "%{name}がレポート%{target}を担当"
+        change_email_user: "%{name}が%{target}のメールアドレスを変更"
+        confirm_user: "%{name}が%{target}のメールアドレスを確認済みへ"
+        create_custom_emoji: "%{name}がカスタム絵文字%{target}を追加"
+        create_domain_block: "%{name}がドメイン%{target}をブロック"
+        create_email_domain_block: "%{name}がドメイン%{target}をメールアドレス用ブラックリストに追加"
+        demote_user: "%{name}が%{target}を降格"
+        destroy_domain_block: "%{name}がドメイン%{target}のブロック解除"
+        destroy_email_domain_block: "%{name}がドメイン%{target}をメールアドレス用ブラックリストから除去"
+        destroy_status: "%{name}が%{target}の投稿を削除"
+        disable_2fa_user: "%{name}が%{target}の二要素認証を無効化"
+        disable_custom_emoji: "%{name}がカスタム絵文字%{target}を無効化"
+        disable_user: "%{name}が%{target}のログインを無効化"
+        enable_custom_emoji: "%{name}がカスタム絵文字%{target}を有効化"
+        enable_user: "%{name}が%{target}のログインを有効化"
+        memorialize_account: "%{name}が%{target}を追悼アカウント化"
+        promote_user: "%{name}が%{target}を昇格"
+        remove_avatar_user: "%{name}が%{target}のアイコンを削除"
+        reopen_report: "%{name}がレポート%{target}を蒔き直し"
+        reset_password_user: "%{name}が%{target}のパスワードをリセット"
+        resolve_report: "%{name}がレポート%{target}を解決済みへ"
+        silence_account: "%{name}が%{target}をサイレンス化"
+        suspend_account: "%{name}が%{target}を停止"
+        unassigned_report: "%{name}がレポート%{target}の担当を外す"
+        unsilence_account: "%{name}が%{target}のサイレンスを解除"
+        unsuspend_account: "%{name}が%{target}の停止を解除"
+        update_custom_emoji: "%{name}がカスタム絵文字%{target}を更新"
+        update_status: "%{name}が%{target}の投稿を更新"
       title: 操作履歴
     custom_emojis:
       by_domain: ドメイン
@@ -269,7 +273,6 @@ ja:
       comment:
         none: なし
       created_at: レポート日時
-      delete: 削除
       id: ID
       mark_as_resolved: 解決済みとしてマーク
       mark_as_unresolved: 未解決として再び開く
@@ -278,10 +281,7 @@ ja:
         create_and_resolve: 書き込み、解決済みにする
         create_and_unresolve: 書き込み、未解決として開く
         delete: 削除
-        placeholder: このレポートに取られた措置やその他更新を記述してください
-      nsfw:
-        'false': NSFW オフ
-        'true': NSFW オン
+        placeholder: 措置内容・その後の更新等
       reopen: 再び開く
       report: レポート#%{id}
       report_contents: 内容
@@ -334,7 +334,7 @@ ja:
         desc_html: ユーザーページにスタッフのバッジを表示します
         title: スタッフバッジを表示する
       site_description:
-        desc_html: フロントページへの表示と meta タグに使用される紹介文です。HTMLタグ、特に<code>&lt;a&gt;</code> と <code>&lt;em&gt;</code>が使えます。
+        desc_html: フロントページへの表示と meta タグに使用される紹介文です。HTMLタグ、特に<code>&lt;a&gt;</code>と<code>&lt;em&gt;</code>が使えます。
         title: インスタンスの説明
       site_description_extended:
         desc_html: あなたのインスタンスにおける行動規範やルール、ガイドライン、そのほかの記述をする際に最適な場所です。HTMLタグが使えます
@@ -354,13 +354,10 @@ ja:
       back_to_account: アカウントページに戻る
       batch:
         delete: 削除
-        nsfw_off: NSFW オフ
-        nsfw_on: NSFW オン
-      execute: 実行
+        nsfw_off: 閲覧注意のマークを取り除く
+        nsfw_on: 閲覧注意としてマークする
       failed_to_execute: 実行に失敗しました
       media:
-        hide: メディアを隠す
-        show: メディアを表示
         title: メディア
       no_media: メディアなし
       title: トゥート一覧
@@ -376,6 +373,7 @@ ja:
   admin_mailer:
     new_report:
       body: "%{reporter}が%{target}を通報しました"
+      body_remote: "%{domain}の誰かが%{target}を通報しました"
       subject: "%{instance}の新しい通報(#%{id})"
   application_mailer:
     notification_preferences: メール設定の変更
@@ -397,14 +395,14 @@ ja:
     change_password: パスワード
     confirm_email: メールアドレスの確認
     delete_account: アカウントの削除
-    delete_account_html: アカウントを削除したい場合、<a href="%{path}">こちら</a>から手続きが行えます。削除する前に、確認画面があります。
-    didnt_get_confirmation: 確認メールを受信できませんか?
-    forgot_password: パスワードをお忘れですか?
+    delete_account_html: アカウントを削除したい場合、<a href="%{path}">削除手続き用ページ</a>から行うことが出来ます。削除する前に、確認画面があります。
+    didnt_get_confirmation: 確認メールが届いていない場合は
+    forgot_password: パスワードを忘れた場合は
     invalid_reset_password_token: パスワードリセットトークンが正しくないか期限切れです。もう一度リクエストしてください。
     login: ログイン
     logout: ログアウト
     migrate_account: 別のアカウントに引っ越す
-    migrate_account_html: 引っ越し先を明記したい場合は<a href="%{path}">こちら</a>で設定できます。
+    migrate_account_html: 引っ越し先を明記したい場合は<a href="%{path}">設定で変更</a>できます。
     or: または
     or_log_in_with: または次のサービスでログイン
     providers:
@@ -465,7 +463,7 @@ ja:
     archive_takeout:
       date: 日時
       download: ダウンロード
-      hint_html: "<strong>トゥートとメディア</strong>のアーカイブをリクエストできます。 データはActivityPub形式で、対応しているソフトウェアで読み込むことができます。"
+      hint_html: "<strong>トゥートとメディア</strong>のアーカイブをリクエストできます。 データはActivityPub形式で、対応しているソフトウェアで読み込むことができます。7日毎にアーカイブをリクエストできます。"
       in_progress: 準備中...
       request: アーカイブをリクエスト
       size: 容量
@@ -487,12 +485,12 @@ ja:
     unlocked_warning_html: 誰でもあなたをフォローすることができ、あなたのプライベート投稿をすぐに見ることができます。フォローする人を限定したい場合は%{lock_link}に設定してください。
     unlocked_warning_title: このアカウントは非公開アカウントに設定されていません
   generic:
-    changes_saved_msg: 正常に変更されました!
+    changes_saved_msg: 正常に変更されました
     powered_by: powered by %{link}
     save_changes: 変更を保存
     validation_errors:
-      one: エラーが発生しました! 以下のエラーを確認してください
-      other: エラーが発生しました! 以下の%{count}個のエラーを確認してください
+      one: エラーが発生しました。以下のエラーを確認してください
+      other: エラーが発生しました。以下の%{count}個のエラーを確認してください
   imports:
     preface: 他のインスタンスでエクスポートされたファイルから、フォロー/ブロックした情報をこのインスタンス上のアカウントにインポートできます。
     success: ファイルは正常にアップロードされ、現在処理中です。しばらくしてから確認してください
@@ -552,16 +550,16 @@ ja:
         other: "新しい%{count}件の通知 \U0001F418"
       title: 不在の間に…
     favourite:
-      body: "%{name}さんにお気に入り登録された、あなたのトゥートがあります:"
+      body: "%{name}さんが以下のあなたのトゥートをお気に入り登録しました:"
       subject: "%{name}さんにお気に入りに登録されました"
       title: 新たなお気に入り登録
     follow:
-      body: "%{name}さんにフォローされています!"
-      subject: "%{name}さんにフォローされています"
+      body: "%{name}さんにフォローされました!"
+      subject: "%{name}さんにフォローされてました"
       title: 新たなフォロワー
     follow_request:
       action: フォローリクエストの管理
-      body: "%{name}さんがあなたにフォローをリクエストしました"
+      body: "%{name}さんがあなたのフォローをリクエストしました"
       subject: "%{name}さんからのフォローリクエスト"
       title: 新たなフォローリクエスト
     mention:
@@ -570,7 +568,7 @@ ja:
       subject: "%{name}さんに返信されました"
       title: 新たな返信
     reblog:
-      body: "%{name}さんにブーストされた、あなたのトゥートがあります:"
+      body: "%{name}さんが以下のあなたのトゥートをブーストしました:"
       subject: "%{name}さんにブーストされました"
       title: 新たなブースト
   number:
@@ -608,7 +606,7 @@ ja:
       action_favourite: お気に入り
       title: "%{name}さんから返信がありました"
     reblog:
-      title: あなたのトゥートが %{name} さんにブーストされました
+      title: あなたのトゥートが%{name}さんにブーストされました
   remote_follow:
     acct: あなたの ユーザー名@ドメイン を入力してください
     missing_resource: リダイレクト先が見つかりませんでした
@@ -672,7 +670,7 @@ ja:
     notifications: 通知
     preferences: ユーザー設定
     settings: 設定
-    two_factor_authentication: 二段階認証
+    two_factor_authentication: 二要素認証
     your_apps: アプリ
   statuses:
     attached:
@@ -684,6 +682,9 @@ ja:
         one: "%{count}本の動画"
         other: "%{count}本の動画"
     content_warning: '閲覧注意: %{warning}'
+    disallowed_hashtags:
+      one: '許可されていないハッシュタグが含まれています: %{tags}'
+      other: '許可されていないハッシュタグが含まれています: %{tags}'
     open_in_web: Webで開く
     over_character_limit: 上限は%{max}文字までです
     pin_errors:
@@ -731,9 +732,9 @@ ja:
 
       <hr class="spacer" />
 
-      <h3 id="protect">情報をどのように保護しますか？</h3>
+      <h3 id="protect">情報をどのように保護しますか?</h3>
 
-      <p>私たちはあなたが入力・送信する際や自身の情報にアクセスする際に個人情報を安全に保つため、さまざまなセキュリティ上の対策を実施します。特にブラウザーセッションだけでなくアプリケーションとAPI間の通信もSSLによって保護されます。またパスワードは強力な不可逆アルゴリズムでハッシュ化されます。二段階認証を有効にし、アカウントへのアクセスをさらに安全にすることができます。</p>
+      <p>私たちはあなたが入力・送信する際や自身の情報にアクセスする際に個人情報を安全に保つため、さまざまなセキュリティ上の対策を実施します。特にブラウザーセッションだけでなくアプリケーションとAPI間の通信もSSLによって保護されます。またパスワードは強力な不可逆アルゴリズムでハッシュ化されます。二要素認証を有効にし、アカウントへのアクセスをさらに安全にすることができます。</p>
 
       <hr class="spacer" />
 
@@ -754,13 +755,13 @@ ja:
 
       <h3 id="cookies">クッキーを使用していますか？</h3>
 
-      <p>はい。クッキーは (あなたが許可した場合に) WebサイトやサービスがWebブラウザーを介してコンピューターに保存する小さなファイルです。使用することで Web サイトがブラウザーを識別し、登録済みのアカウントがある場合関連付けます。</p>
+      <p>はい。クッキーは(あなたが許可した場合に)WebサイトやサービスがWebブラウザーを介してコンピューターに保存する小さなファイルです。使用することでWebサイトがブラウザーを識別し、登録済みのアカウントがある場合関連付けます。</p>
 
       <p>私たちはクッキーを将来の訪問のために設定を保存し呼び出す用途に使用します。</p>
 
       <hr class="spacer" />
 
-      <h3 id="disclose">なんらかの情報を外部に提供していますか？</h3>
+      <h3 id="disclose">なんらかの情報を外部に提供していますか?</h3>
 
       <p>私たちは個人を特定できる情報を外部へ販売・取引・その他方法で渡すことはありません。これには当サイトの運営・業務遂行・サービス提供を行ううえで補助する信頼できる第三者をこの機密情報の保護に同意するかぎり含みません。法令の遵守やサイトポリシーの施行、権利・財産・安全の保護に適切と判断した場合、あなたの情報を公開することがあります。</p>
 
@@ -772,7 +773,7 @@ ja:
 
       <h3 id="coppa">児童オンラインプライバシー保護法の遵守</h3>
 
-      <p>当サイト・製品・サービスは13歳以上の人を対象としています。サーバーが米国にあり、あなたが13歳未満の場合、COPPA (<a href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Children's Online Privacy Protection Act</a> - 児童オンラインプライバシー保護法) により当サイトを使用できません。</p>
+      <p>当サイト・製品・サービスは13歳以上の人を対象としています。サーバーが米国にあり、あなたが13歳未満の場合、COPPA(<a href="https://en.wikipedia.org/wiki/Children%27s_Online_Privacy_Protection_Act">Children's Online Privacy Protection Act</a>——児童オンラインプライバシー保護法)により当サイトを使用できません。</p>
 
       <hr class="spacer" />
 
@@ -785,17 +786,18 @@ ja:
       <p>オリジナルの出典: <a href="https://github.com/discourse/discourse">Discourse privacy policy</a></p>
     title: "%{instance}利用規約・プライバシーポリシー"
   themes:
+    contrast: ハイコントラスト
     default: Mastodon
   time:
     formats:
       default: "%Y年%m月%d日 %H:%M"
   two_factor_authentication:
     code_hint: 確認するには認証アプリで表示されたコードを入力してください
-    description_html: "<strong>二段階認証</strong>を有効にするとログイン時、電話でコードを受け取る必要があります。"
+    description_html: "<strong>二要素認証</strong>を有効にするとログイン時、認証アプリからコードを入力する必要があります。"
     disable: 無効
     enable: 有効
-    enabled: 二段階認証は有効になっています
-    enabled_success: 二段階認証が有効になりました
+    enabled: 二要素認証は有効になっています
+    enabled_success: 二要素認証が有効になりました
     generate_recovery_codes: リカバリーコードを生成
     instructions_html: "<strong>Google Authenticatorか、もしくはほかのTOTPアプリでこのQRコードをスキャンしてください。</strong>これ以降、ログインするときはそのアプリで生成されるコードが必要になります。"
     lost_recovery_codes: リカバリーコードを使用すると携帯電話を紛失した場合でもアカウントにアクセスできるようになります。リカバリーコードを紛失した場合もここで再生成することができますが、古いリカバリーコードは無効になります。
@@ -815,21 +817,22 @@ ja:
       edit_profile_step: アバター画像やヘッダー画像をアップロードしたり、表示名やその他プロフィールを変更しカスタマイズすることができます。新しいフォロワーからのフォローを許可する前に検討したい場合、アカウントを非公開にすることができます。
       explanation: 始めるにあたってのアドバイスです
       final_action: 始めましょう
-      final_step: 'さあ始めましょう! たとえフォロワーがいなくても、あなたの公開した投稿はローカルタイムラインやハッシュタグなどで誰かの目に止まるかもしれません。自己紹介をしたい時は #introductions ハッシュタグを使うといいかもしれません。'
+      final_step: 'さあ始めましょう! たとえフォロワーがいなくても、あなたの公開した投稿はローカルタイムラインやハッシュタグなどで誰かの目に止まるかもしれません。自己紹介をしたい時は #introductions ハッシュタグを使うと良いでしょう。'
       full_handle: あなたの正式なユーザー名
       full_handle_hint: これは別のインスタンスからフォローしてもらったりメッセージのやり取りをする際に、友達に伝えるといいでしょう。
       review_preferences_action: 設定の変更
-      review_preferences_step: 受け取りたいメールや投稿の公開範囲などの設定を必ず行ってください。不快でないならアニメーション GIF の自動再生を有効にすることもできます。
+      review_preferences_step: 受け取りたいメールや投稿の公開範囲などの設定を必ず行ってください。不快でないならアニメーションGIFの自動再生を有効にすることもできます。
       subject: Mastodon へようこそ
-      tip_bridge_html: もし Twitter から来られたのであれば、<a href="%{bridge_url}">bridge app</a> を使用することで Mastodon での友達のアカウントを探すこともできます。ただし bridge app を使用したことのある相手に限ります!
+      tip_bridge_html: もし Twitter から来られたのであれば、<a href="%{bridge_url}">bridge app</a>を使用することでMastodonでの友達のアカウントを探すこともできます。ただし bridge app を使用したことのある相手に限ります!
       tip_federated_timeline: 連合タイムラインは Mastodon ネットワークの流れを見られるものです。ただしあなたと同じインスタンスの人がフォローしている人だけが含まれるので、それが全てではありません。
       tip_following: 標準では自動でインスタンスの管理者をフォローしています。もっと興味のある人たちを見つけるには、ローカルタイムラインと連合タイムラインを確認してください。
-      tip_local_timeline: ローカルタイムラインは %{instance} にいる人々の流れを見られるものです。彼らはあなたと同じインスタンスにいる隣人のようなものです!
-      tip_mobile_webapp: もしモバイル端末のブラウザで Mastodon をホーム画面に追加できる場合、プッシュ通知を受け取ることができます。それはまるでネイティブアプリのように動作します!
+      tip_local_timeline: ローカルタイムラインは%{instance}にいる人々の流れを見られるものです。彼らはあなたと同じインスタンスにいる隣人のようなものです!
+      tip_mobile_webapp: もしモバイル端末のブラウザでMastodonをホーム画面に追加できる場合、プッシュ通知を受け取ることができます。それはまるでネイティブアプリのように動作します!
       tips: 豆知識
       title: ようこそ、%{name}!
   users:
     invalid_email: メールアドレスが無効です
-    invalid_otp_token: 二段階認証コードが間違っています
+    invalid_otp_token: 二要素認証コードが間違っています
+    otp_lost_help_html: どちらも使用できない場合、%{email} に連絡を取ると解決できるかもしれません
     seamless_external_login: あなたは外部サービスを介してログインしているため、パスワードとメールアドレスの設定は利用できません。
     signed_in_as: '下記でログイン中:'
