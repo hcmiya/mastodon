@@ -29,16 +29,16 @@ module Mastodon
     end
 
     def to_s
-      [to_a.join('.'), flags, '~v6don-tor'].join
+      [to_a.join('.'), flags].join
     end
 
     def source_base_url
-      'https://js4.in/repo/gitweb.cgi/v6don'
+      'https://github.com/tootsuite/mastodon'
     end
 
     # specify git tag or commit hash here
     def source_tag
-      'refs/heads/tor'
+      nil
     end
 
     def source_url
