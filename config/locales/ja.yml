@@ -457,8 +457,8 @@ ja:
       title: セキュリティ認証に失敗
     '429': リクエストの制限に達しました
     '500':
-      content: もうしわけありませんが、なにかが間違っています。
-      title: このページは正しくありません
+      content: 当サイト内部が原因のエラーが発生しました。申し訳ありませんがしばらくお待ち下さい。
+      title: サーバーエラー
     noscript_html: Mastodonのウェブアプリケーションを利用する場合はJavaScriptを有効にしてください。またはあなたのプラットフォーム向けの<a href="https://github.com/tootsuite/documentation/blob/master/Using-Mastodon/Apps.md">Mastodonネイティブアプリ</a>を探すことができます。
   exports:
     archive_takeout:
@@ -551,25 +551,25 @@ ja:
         other: "新しい%{count}件の通知 \U0001F418"
       title: 不在の間に…
     favourite:
-      body: "%{name}さんが以下のあなたのトゥートをお気に入り登録しました:"
-      subject: "%{name}さんにお気に入りに登録されました"
+      body: "%{name} さんが以下のあなたのトゥートをお気に入り登録しました:"
+      subject: "%{name}さんがお気に入り登録しました"
       title: 新たなお気に入り登録
     follow:
-      body: "%{name}さんにフォローされました!"
-      subject: "%{name}さんにフォローされてました"
+      body: "%{name} さんにフォローされました!"
+      subject: "%{name}さんにフォローされました"
       title: 新たなフォロワー
     follow_request:
       action: フォローリクエストの管理
-      body: "%{name}さんがあなたのフォローをリクエストしました"
+      body: "%{name} さんがあなたのフォローをリクエストしました"
       subject: "%{name}さんからのフォローリクエスト"
       title: 新たなフォローリクエスト
     mention:
       action: 返信
-      body: "%{name}さんから返信がありました:"
+      body: "%{name} さんから返信がありました:"
       subject: "%{name}さんに返信されました"
       title: 新たな返信
     reblog:
-      body: "%{name}さんが以下のあなたのトゥートをブーストしました:"
+      body: "%{name} さんが以下のあなたのトゥートをブーストしました:"
       subject: "%{name}さんにブーストされました"
       title: 新たなブースト
   number:
