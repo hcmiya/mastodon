@@ -43,6 +43,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     spoiler_text: PropTypes.string,
     v6don_footer_text: PropTypes.string,
     focusDate: PropTypes.instanceOf(Date),
+    caretPosition: PropTypes.number,
     preselectDate: PropTypes.instanceOf(Date),
     is_submitting: PropTypes.bool,
     is_uploading: PropTypes.bool,
@@ -100,7 +101,6 @@ export default class ComposeForm extends ImmutablePureComponent {
   }
 
   onSuggestionSelected = (tokenStart, token, value) => {
-    this._restoreCaret = null;
     this.props.onSuggestionSelected(tokenStart, token, value);
   }
 
@@ -124,9 +124,9 @@ export default class ComposeForm extends ImmutablePureComponent {
       if (this.props.preselectDate !== prevProps.preselectDate) {
         selectionEnd   = this.props.text.length;
         selectionStart = this.props.text.search(/\s/) + 1;
-      } else if (typeof this._restoreCaret === 'number') {
-        selectionStart = this._restoreCaret;
-        selectionEnd   = this._restoreCaret;
+      } else if (typeof this.props.caretPosition === 'number') {
+        selectionStart = this.props.caretPosition;
+        selectionEnd   = this.props.caretPosition;
       } else {
         selectionEnd   = this.props.text.length;
         selectionStart = selectionEnd;
@@ -146,10 +146,8 @@ export default class ComposeForm extends ImmutablePureComponent {
   handleEmojiPick = (data) => {
     const { text }     = this.props;
     const position     = this.autosuggestTextarea.textarea.selectionStart;
-    const emojiChar    = data.native;
     const needsSpace   = data.custom && position > 0 && !allowedAroundShortCode.includes(text[position - 1]);
 
-    this._restoreCaret = position + emojiChar.length + 1 + (needsSpace ? 1 : 0);
     this.props.onPickEmoji(position, data, needsSpace);
   }
 

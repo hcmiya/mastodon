@@ -22,6 +22,7 @@ const mapStateToProps = state => ({
   v6don_footer_text: state.getIn(['compose', 'v6don_footer_text']),
   privacy: state.getIn(['compose', 'privacy']),
   focusDate: state.getIn(['compose', 'focusDate']),
+  caretPosition: state.getIn(['compose', 'caretPosition']),
   preselectDate: state.getIn(['compose', 'preselectDate']),
   is_submitting: state.getIn(['compose', 'is_submitting']),
   is_uploading: state.getIn(['compose', 'is_uploading']),
