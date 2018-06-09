@@ -41,18 +41,18 @@ class Status < ApplicationRecord
 
   belongs_to :application, class_name: 'Doorkeeper::Application', optional: true
 
-  belongs_to :account, inverse_of: :statuses, counter_cache: true
+  belongs_to :account, inverse_of: :statuses
   belongs_to :in_reply_to_account, foreign_key: 'in_reply_to_account_id', class_name: 'Account', optional: true
   belongs_to :conversation, optional: true
 
   belongs_to :thread, foreign_key: 'in_reply_to_id', class_name: 'Status', inverse_of: :replies, optional: true
-  belongs_to :reblog, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblogs, counter_cache: :reblogs_count, optional: true
+  belongs_to :reblog, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblogs, optional: true
 
   has_many :favourites, inverse_of: :status, dependent: :destroy
   has_many :reblogs, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblog, dependent: :destroy
   has_many :replies, foreign_key: 'in_reply_to_id', class_name: 'Status', inverse_of: :thread
   has_many :mentions, dependent: :destroy
-  has_many :media_attachments, dependent: :destroy
+  has_many :media_attachments, dependent: :nullify
 
   has_and_belongs_to_many :tags
   has_and_belongs_to_many :preview_cards
@@ -167,6 +167,17 @@ class Status < ApplicationRecord
     @emojis ||= CustomEmoji.from_text([spoiler_text, text].join(' '), account.domain)
   end
 
+  def mark_for_mass_destruction!
+    @marked_for_mass_destruction = true
+  end
+
+  def marked_for_mass_destruction?
+    @marked_for_mass_destruction
+  end
+
+  after_create  :increment_counter_caches
+  after_destroy :decrement_counter_caches
+
   after_create_commit :store_uri, if: :local?
   after_create_commit :update_statistics, if: :local?
 
@@ -176,7 +187,6 @@ class Status < ApplicationRecord
   before_validation :set_reblog
   before_validation :set_visibility
   before_validation :set_conversation
-  before_validation :set_sensitivity
   before_validation :set_local
 
   class << self
@@ -295,7 +305,11 @@ class Status < ApplicationRecord
         # non-followers can see everything that isn't private/direct, but can see stuff they are mentioned in.
         visibility.push(:private) if account.following?(target_account)
 
-        where(visibility: visibility).or(where(id: account.mentions.select(:status_id)))
+        scope = left_outer_joins(:reblog)
+
+        scope.where(visibility: visibility)
+             .or(scope.where(id: account.mentions.select(:status_id)))
+             .merge(scope.where(reblog_of_id: nil).or(scope.where.not(reblogs_statuses: { account_id: account.excluded_from_timeline_account_ids })))
       end
     end
 
@@ -357,10 +371,6 @@ class Status < ApplicationRecord
     self.sensitive  = false if sensitive.nil?
   end
 
-  def set_sensitivity
-    self.sensitive = sensitive || spoiler_text.present?
-  end
-
   def set_conversation
     self.reply = !(in_reply_to_id.nil? && thread.nil?) unless reply
 
@@ -387,5 +397,41 @@ class Status < ApplicationRecord
   def update_statistics
     return unless public_visibility? || unlisted_visibility?
     ActivityTracker.increment('activity:statuses:local')
+  end
+
+  def increment_counter_caches
+    return if direct_visibility?
+
+    if association(:account).loaded?
+      account.update_attribute(:statuses_count, account.statuses_count + 1)
+    else
+      Account.where(id: account_id).update_all('statuses_count = COALESCE(statuses_count, 0) + 1')
+    end
+
+    return unless reblog?
+
+    if association(:reblog).loaded?
+      reblog.update_attribute(:reblogs_count, reblog.reblogs_count + 1)
+    else
+      Status.where(id: reblog_of_id).update_all('reblogs_count = COALESCE(reblogs_count, 0) + 1')
+    end
+  end
+
+  def decrement_counter_caches
+    return if direct_visibility? || marked_for_mass_destruction?
+
+    if association(:account).loaded?
+      account.update_attribute(:statuses_count, [account.statuses_count - 1, 0].max)
+    else
+      Account.where(id: account_id).update_all('statuses_count = GREATEST(COALESCE(statuses_count, 0) - 1, 0)')
+    end
+
+    return unless reblog?
+
+    if association(:reblog).loaded?
+      reblog.update_attribute(:reblogs_count, [reblog.reblogs_count - 1, 0].max)
+    else
+      Status.where(id: reblog_of_id).update_all('reblogs_count = GREATEST(COALESCE(reblogs_count, 0) - 1, 0)')
+    end
   end
 end
