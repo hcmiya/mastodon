@@ -141,9 +141,7 @@ class Account < ApplicationRecord
            prefix: true,
            allow_nil: true
 
-  def filtered_languages
-    nil
-  end
+  delegate :chosen_languages, to: :user, prefix: false, allow_nil: true
 
   def local?
     domain.nil?
