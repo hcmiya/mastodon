@@ -35,6 +35,7 @@ class Formatter
     html = encode_and_link_urls(html, linkable_accounts)
     html = encode_custom_emojis(html, status.emojis) if options[:custom_emojify]
     html = simple_format(html, {}, sanitize: false)
+    html = encode_urn(html)
     html = html.delete("\n")
 
     html.html_safe # rubocop:disable Rails/OutputSafety
@@ -166,6 +167,62 @@ class Formatter
     end
 
     html
+  end
+
+  URN_PATTERN = [
+    {
+      :re => /\Aietf:rfc:(\d+)(#[a-zA-Z0-9-])?\b/,
+      :f => -> (nm) { {:url => "https://tools.ietf.org/html/rfc#{nm[1]}#{nm[2]}", :name => "[RFC #{nm[1]}]"} }
+    },
+    {
+      :re => /\Aisbn:(\d[\d-]+\d(?:-?X)?)\b/i,
+      :f => -> (nm) {
+        isbn = nm[1].delete('-')
+        isbnlen = isbn.size
+        {:url => "https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%96%87%E7%8C%AE%E8%B3%87%E6%96%99/#{nm[1]}", :name => "[ISBN #{isbn}]"} if isbnlen == 10 || isbnlen == 13
+      },
+    },
+    {
+      :re => /\Aiso:std:(iso|iso-iec|iso-cie|iso-astm|iso-ieee|iec|iso-iec-ieee):(\d+)(?::(-[\da-z-]+))?(:[:\da-z.,-]*[\da-z])?\b/i,
+      :f => -> (nm) {
+        org = nm[1].upcase.gsub('-', '/')
+        num = nm[2]
+        part = nm[3]
+        other = nm[4]
+        {:url => "https://www.iso.org/obp/ui/\##{nm[0]}", :name => "[#{org} #{num}#{part}]"}
+      },
+    },
+  ]
+  def encode_urn(html)
+    def linkify(text, cont = '')
+      text.match(/\burn:/) { |m|
+        replacement = ''
+        beginpos = nextpos = m.end(0)
+        URN_PATTERN.each do |urn|
+          urn[:re].match(text[nextpos..-1]) { |site|
+            if replacement_data = urn[:f].call(site)
+              replacement = "<a title='urn:#{site[0]}' href='#{replacement_data[:url]}'>#{replacement_data[:name]}</a>"
+              nextpos = beginpos + site.end(0)
+              beginpos = m.begin(0)
+              break
+            end
+          }
+        end
+        linkify(text[nextpos..-1], "#{cont}#{text[0...beginpos]}#{replacement}")
+      } || cont + text
+    end
+
+    def fetch(html, cont = '')
+      if begintag = html.index('<')
+        linkifyee = html.slice!(0...begintag)
+        endtag = html.match(/\A<a .*?<\/a>/) ? $~.end(0) : html.index('>')
+        fetch(html[endtag..-1], "#{linkify(linkifyee, cont)}#{html[0...endtag]}")
+      else
+        linkify(html, cont)
+      end
+    end
+
+    fetch(html)
   end
 
   def rewrite(text, entities)
