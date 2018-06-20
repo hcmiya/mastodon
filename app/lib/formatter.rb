@@ -171,15 +171,48 @@ class Formatter
 
   URN_PATTERN = [
     {
-      :re => /\Aietf:rfc:(\d+)(#[a-zA-Z0-9-])?\b/,
-      :f => -> (nm) { {:url => "https://tools.ietf.org/html/rfc#{nm[1]}#{nm[2]}", :name => "[RFC #{nm[1]}]"} }
+      :re => /\Aietf:(rfc|bcp|std|fyi):(\d+)(#[a-zA-Z0-9.-]+)?\b/,
+      :f => -> (nm) {
+        f_part = nm[3]
+        f_name = case f_part
+        when /^#section-([\d.]*\d)/
+          "§ #{$1}"
+        when /^#appendix-(([A-Z])(\.[\d.]*\d)?)/
+          "Appendix #{$1}"
+        end
+        {:url => "https://tools.ietf.org/html/#{nm[1]}#{nm[2]}#{f_part}", :name => [nm[1].upcase, nm[2], f_name].compact.join(' ') }
+      }
     },
     {
       :re => /\Aisbn:(\d[\d-]+\d(?:-?X)?)\b/i,
       :f => -> (nm) {
         isbn = nm[1].delete('-')
         isbnlen = isbn.size
-        {:url => "https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%96%87%E7%8C%AE%E8%B3%87%E6%96%99/#{nm[1]}", :name => "[ISBN #{isbn}]"} if isbnlen == 10 || isbnlen == 13
+        return if ![10, 13].include?(isbnlen)
+        if isbnlen == 13 && isbn.starts_with?("978")
+          # ISBN13をAmazonリンク化するためISBN10化して検査数字再計算
+          weight = 11
+          isbn = isbn[3...-1]
+          sum = 11 - isbn.split('').inject(0) do |sum, digit|
+            weight = weight - 1
+            sum + digit.to_i * weight
+          end % 11
+          sum = case sum
+          when 11 then 0
+          when 10 then 'X'
+          else sum
+          end.to_s
+          isbn << sum
+          isbnlen = 10
+        end
+        disp = "ISBN #{nm[1]}"
+        url = case isbnlen
+        when 10
+          "https://www.amazon.co.jp/dp/#{isbn}"
+        when 13
+          "https://ja.wikipedia.org/wiki/%E7%89%B9%E5%88%A5:%E6%96%87%E7%8C%AE%E8%B3%87%E6%96%99/#{isbn}"
+        end
+        {:url => url, :name => disp}
       },
     },
     {
@@ -189,34 +222,35 @@ class Formatter
         num = nm[2]
         part = nm[3]
         other = nm[4]
-        {:url => "https://www.iso.org/obp/ui/\##{nm[0]}", :name => "[#{org} #{num}#{part}]"}
+        {:url => "https://www.iso.org/obp/ui/\##{nm[0]}", :name => "#{org} #{num}#{part}"}
       },
     },
   ]
   def encode_urn(html)
     def linkify(text, cont = '')
-      text.match(/\burn:/) { |m|
-        replacement = ''
-        beginpos = nextpos = m.end(0)
-        URN_PATTERN.each do |urn|
-          urn[:re].match(text[nextpos..-1]) { |site|
-            if replacement_data = urn[:f].call(site)
-              replacement = "<a title='urn:#{site[0]}' href='#{replacement_data[:url]}'>#{replacement_data[:name]}</a>"
-              nextpos = beginpos + site.end(0)
-              beginpos = m.begin(0)
-              break
-            end
-          }
+      return cont + text unless scheme = text.match(/\burn:/)
+      
+      replacement = ''
+      beginpos = nextpos = scheme.end(0)
+      URN_PATTERN.each do |ptn|
+        ptn[:re].match(text[nextpos..-1]) do |m|
+          if replacement_data = ptn[:f].call(m)
+            replacement = "<a title='urn:#{m[0]}' href='#{replacement_data[:url]}'>#{replacement_data[:name]}</a>"
+            nextpos = beginpos + m.end(0)
+            beginpos = scheme.begin(0)
+            break
+          end
         end
-        linkify(text[nextpos..-1], "#{cont}#{text[0...beginpos]}#{replacement}")
-      } || cont + text
+      end
+      linkify(text[nextpos..-1], "#{cont}#{text[0...beginpos]}#{replacement}")
     end
 
     def fetch(html, cont = '')
       if begintag = html.index('<')
-        linkifyee = html.slice!(0...begintag)
+        raw = html.slice!(0...begintag)
         endtag = html.match(/\A<a .*?<\/a>/) ? $~.end(0) : html.index('>')
-        fetch(html[endtag..-1], "#{linkify(linkifyee, cont)}#{html[0...endtag]}")
+        tag = html.slice!(0...endtag)
+        fetch(html, cont + linkify(raw) + tag)
       else
         linkify(html, cont)
       end
