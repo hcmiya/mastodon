@@ -21,20 +21,11 @@ export default class AutosuggestEmoji extends React.PureComponent {
         return null;
       }
 
-      const etext = mapping.filename.split('-').reduce((str, code) => str + String.fromCodePoint(parseInt(code, 16)), '');
-      img = (<svg className='emojione' viewBox='0 0 10 10'>
-          <g>
-            <desc>{etext}</desc>
-            <text x='5' y='5.5' fontSize='9' textAnchor='middle' dominantBaseline='middle'>{etext}</text>
-          </g>
-        </svg>);
+      img = mapping.filename.split('-').reduce((str, code) => str + String.fromCodePoint(parseInt(code, 16)), '');
     }
 
     return (
-      <div className='autosuggest-emoji'>
-        {img}
-        {emoji.colons}
-      </div>
+      <div className='autosuggest-emoji'>{img} {emoji.colons}</div>
     );
   }
 
