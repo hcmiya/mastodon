@@ -26,6 +26,7 @@ const messages = defineMessages({
 });
 
 const assetHost = process.env.CDN_HOST || '';
+const pickerButton = require(`../../../../images/v6don/1f602.svg`);
 let EmojiPicker, Emoji; // load asynchronously
 
 const backgroundImageFn = () => `${assetHost}/emoji/sheet_10.png`;
@@ -357,7 +358,7 @@ export default class EmojiPickerDropdown extends React.PureComponent {
           <img
             className={classNames('emojione', { 'pulse-loading': active && loading })}
             alt='🙂'
-            src={`${assetHost}/emoji/1f602.svg`}
+            src={pickerButton}
           />
         </div>
 
