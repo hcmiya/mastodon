@@ -2,9 +2,9 @@ import loadPolyfills from '../mastodon/load_polyfills';
 import ready from '../mastodon/ready';
 import { start } from '../mastodon/common';
 
-start();
-
 import localQuote from '../mastodon/features/v6don/quote';
+
+start();
 
 window.addEventListener('message', e => {
   const data = e.data || {};
