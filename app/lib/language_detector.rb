@@ -3,6 +3,8 @@
 class LanguageDetector
   include Singleton
 
+  CHARACTER_THRESHOLD = 140
+
   def initialize
   end
 
@@ -13,6 +15,6 @@ class LanguageDetector
   private
 
   def default_locale(account)
-    account.user_locale&.to_sym
+    account.user_locale&.to_sym || I18n.default_locale
   end
 end
