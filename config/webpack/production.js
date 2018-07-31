@@ -25,6 +25,8 @@ if (process.env.S3_ENABLED === 'true') {
   attachmentHost = null;
 }
 
+const compressionTargets = /\.((js|css)(\.map)?|html|json|ico|svg|eot|otf|ttf|woff2?)$/;
+
 module.exports = merge(sharedConfig, {
   mode: 'production',
 
@@ -61,12 +63,12 @@ module.exports = merge(sharedConfig, {
     new BrotliGzipPlugin({
       asset: '[path].gz[query]',
       algorithm: 'gzip',
-      test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
+      test: compressionTargets,
     }),
     new BrotliGzipPlugin({
       asset: '[path].br[query]',
       algorithm: 'brotli',
-      test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
+      test: compressionTargets,
     }),
     new BundleAnalyzerPlugin({ // generates report.html and stats.json
       analyzerMode: 'static',
