@@ -2,23 +2,13 @@
 
 const merge = require('webpack-merge');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
+const BrotliGzipPlugin = require('brotli-gzip-webpack-plugin');
 const sharedConfig = require('./shared.js');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const OfflinePlugin = require('offline-plugin');
 const { publicPath } = require('./configuration.js');
 const path = require('path');
 const { URL } = require('url');
-
-let compressionAlgorithm;
-try {
-  const zopfli = require('node-zopfli');
-  compressionAlgorithm = (content, options, fn) => {
-    zopfli.gzip(content, options, fn);
-  };
-} catch (error) {
-  compressionAlgorithm = 'gzip';
-}
 
 let attachmentHost;
 
@@ -68,9 +58,14 @@ module.exports = merge(sharedConfig, {
   },
 
   plugins: [
-    new CompressionPlugin({
+    new BrotliGzipPlugin({
       asset: '[path].gz[query]',
-      algorithm: compressionAlgorithm,
+      algorithm: 'gzip',
+      test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
+    }),
+    new BrotliGzipPlugin({
+      asset: '[path].br[query]',
+      algorithm: 'brotli',
       test: /\.(js|css|html|json|ico|svg|eot|otf|ttf)$/,
     }),
     new BundleAnalyzerPlugin({ // generates report.html and stats.json
