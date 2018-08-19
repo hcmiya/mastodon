@@ -33,18 +33,18 @@ class Time extends React.PureComponent {
     this.d.getTime(now);
     this.nodes.root = ReactDOM.findDOMNode(this);
     this.nodes.min = this.nodes.root.querySelector('.v6don-estclock-permin');
-    this.prevTickMin = Math.floor(now / 60000);
     if (this.props.full) {
       this.nodes.sec = this.nodes.root.querySelector('.v6don-estclock-sec');
       this.nodes.tick = this.nodes.root.querySelector('.v6don-estclock-tick');
-      this.prevTickSec = Math.floor(now / 1000);
-      this.prevTickHalfSec = Math.floor(now / 500);
     }
+    this.tickInterval = this.props.full ? 500 : 60000;
+    this.nextEpoch = now - this.tickInterval - 1;
     this.fid = requestAnimationFrame(this.tick);
   }
 
   componentWillUnmount() {
     cancelAnimationFrame(this.fid);
+    clearTimeout(this.tid);
   }
 
   ftime(elem) {
@@ -58,27 +58,26 @@ class Time extends React.PureComponent {
 
   tick() {
     const now = Date.now();
-    this.d.setTime(now);
-    if (this.props.full) {
-      const tickSec = Math.floor(now / 1000);
-      const tickHalfSec = Math.floor(now / 500);
-      if (tickSec > this.prevTickSec) {
-        this.prevTickSec = tickSec;
+    if (now >= this.nextEpoch) {
+      cancelAnimationFrame(this.fid);
+      this.d.setTime(now);
+      if (this.props.full) {
         this.nodes.root.setAttribute('datetime', this.d.toISOString().replace(/\.\d+/, ''));
         this.nodes.sec.textContent = this.ftime('second');
+        this.nodes.tick.setAttribute('style', Math.floor(now / 500) % 2 ? 'opacity: 0;' : '');
+        this.nodes.root.setAttribute('datetime', this.d.toISOString().replace(/\.\d+/, ''));
+      } else {
+        this.nodes.root.setAttribute('datetime', this.d.toISOString().replace(/:\d+\.\d+/, ''));
       }
-      if (tickHalfSec > this.prevTickHalfSec) {
-        this.prevTickHalfSec = tickHalfSec;
-        this.nodes.tick.setAttribute('style', tickHalfSec % 2 ? 'opacity: 0;' : '');
-      }
-    }
-    const tickMin = Math.floor(now / 60000);
-    if (tickMin > this.prevTickMin) {
-      this.prevTickMin = tickMin;
       this.nodes.min.textContent = this.fdate();
-      this.nodes.root.setAttribute('datetime', this.d.toISOString().replace(this.props.full ? /\.\d+/ : /:\d+\.\d+/, ''));
+      this.nextEpoch = (Math.floor(now / this.tickInterval) + 1) * this.tickInterval;
+      const nextExec = this.nextEpoch - now - 1;
+      this.tid = setTimeout(() => {
+        this.fid = requestAnimationFrame(this.tick);
+      }, nextExec >= 0 ? nextExec : 0);
+    } else {
+      this.fid = requestAnimationFrame(this.tick);
     }
-    this.fid = requestAnimationFrame(this.tick);
   }
 
   render() {
