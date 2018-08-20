@@ -53,16 +53,16 @@
 
 .v6don-kira {
   display: inline-block;
-  animation: v6don-kira 0.8s infinite;
+  animation: v6don-kira 0.8s 50;
 }
 .v6don-nobi {
   display: inline-block;
-  animation: v6don-nobi 1.8s infinite;
+  animation: v6don-nobi 1.8s 22;
   transform-origin: center bottom;  
 }
 .v6don-wave {
   display: inline-block;
-  animation: v6don-wave 2s infinite;
+  animation: v6don-wave 2s 20;
 }
 .v6don-tyu2 {
   background-color: black;
@@ -83,7 +83,7 @@
 }
 .v6don-bitibiti {
   display: inline-block;
-  animation: v6don-bitibiti 1.6s infinite;
+  animation: v6don-bitibiti 1.6s 25;
 }
 .v6don-emoji::before {
   font-family: 'v6don-emoji';
@@ -143,7 +143,7 @@ ruby {
   > span {
     animation-duration: 0.5s;
     animation-delay: 0s;
-    animation-iteration-count: infinite;
+    animation-iteration-count: 80;
   }
   
   &-si {
