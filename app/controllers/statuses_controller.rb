@@ -22,6 +22,8 @@ class StatusesController < ApplicationController
   def show
     respond_to do |format|
       format.html do
+        @body_classes = 'with-modals'
+
         set_ancestors
         set_descendants
 
@@ -31,7 +33,7 @@ class StatusesController < ApplicationController
       format.json do
         skip_session! unless @stream_entry.hidden?
 
-        render_cached_json(['activitypub', 'note', @status.cache_key], content_type: 'application/activity+json', public: !@stream_entry.hidden?) do
+        render_cached_json(['activitypub', 'note', @status], content_type: 'application/activity+json', public: !@stream_entry.hidden?) do
           ActiveModelSerializers::SerializableResource.new(@status, serializer: ActivityPub::NoteSerializer, adapter: ActivityPub::Adapter)
         end
       end
@@ -41,7 +43,7 @@ class StatusesController < ApplicationController
   def activity
     skip_session!
 
-    render_cached_json(['activitypub', 'activity', @status.cache_key], content_type: 'application/activity+json', public: !@stream_entry.hidden?) do
+    render_cached_json(['activitypub', 'activity', @status], content_type: 'application/activity+json', public: !@stream_entry.hidden?) do
       ActiveModelSerializers::SerializableResource.new(@status, serializer: ActivityPub::ActivitySerializer, adapter: ActivityPub::Adapter)
     end
   end

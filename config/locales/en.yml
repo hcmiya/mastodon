@@ -6,14 +6,12 @@ en:
     about_this: About
     administered_by: 'Administered by:'
     api: API
+    apps: Mobile apps
     closed_registrations: Registrations are currently closed on this instance. However! You can find a different instance to make an account on and get access to the very same network from there.
     contact: Contact
     contact_missing: Not set
     contact_unavailable: N/A
-    description_headline: What is %{domain}?
     documentation: Documentation
-    domain_count_after: other instances
-    domain_count_before: Connected to
     extended_description_html: |
       <h3>A good place for rules</h3>
       <p>The extended description has not been set up yet.</p>
@@ -32,13 +30,18 @@ en:
     other_instances: Instance list
     privacy_policy: Privacy policy
     source_code: Source code
-    status_count_after: statuses
+    status_count_after:
+      one: status
+      other: statuses
     status_count_before: Who authored
     terms: Terms of service
-    user_count_after: users
+    user_count_after:
+      one: user
+      other: users
     user_count_before: Home to
     what_is_mastodon: What is Mastodon?
   accounts:
+    choices_html: "%{name}'s choices:"
     follow: Follow
     followers: Followers
     following: Following
@@ -49,6 +52,8 @@ en:
     nothing_here: There is nothing here!
     people_followed_by: People whom %{name} follows
     people_who_follow: People who follow %{name}
+    pin_errors:
+      following: You must be already following the person you want to endorse
     posts: Toots
     posts_with_replies: Toots and replies
     reserved_username: The username is reserved
@@ -184,6 +189,7 @@ en:
         unsuspend_account: "%{name} unsuspended %{target}'s account"
         update_custom_emoji: "%{name} updated emoji %{target}"
         update_status: "%{name} updated status by %{target}"
+      deleted_status: "(deleted status)"
       title: Audit log
     custom_emojis:
       by_domain: Domain
@@ -280,6 +286,7 @@ en:
       search: Search
       title: Known instances
     invites:
+      deactivate_all: Deactivate all
       filter:
         all: All
         available: Available
@@ -372,11 +379,14 @@ en:
         desc_html: Show a staff badge on a user page
         title: Show staff badge
       site_description:
-        desc_html: Introductory paragraph on the frontpage and in meta tags. You can use HTML tags, in particular <code>&lt;a&gt;</code> and <code>&lt;em&gt;</code>.
+        desc_html: Introductory paragraph on the frontpage. Describe what makes this Mastodon server special and anything else important. You can use HTML tags, in particular <code>&lt;a&gt;</code> and <code>&lt;em&gt;</code>.
         title: Instance description
       site_description_extended:
         desc_html: A good place for your code of conduct, rules, guidelines and other things that set your instance apart. You can use HTML tags
         title: Custom extended information
+      site_short_description:
+        desc_html: Displayed in sidebar and meta tags. Describe what Mastodon is and what makes this server special in a single paragraph. If empty, defaults to instance description.
+        title: Short instance description
       site_terms:
         desc_html: You can write your own privacy policy, terms of service or other legalese. You can use HTML tags
         title: Custom terms of service
@@ -398,6 +408,7 @@ en:
       media:
         title: Media
       no_media: No media
+      no_status_selected: No statuses were changed as none were selected
       title: Account statuses
       with_media: With media
     subscriptions:
@@ -407,6 +418,12 @@ en:
       last_delivery: Last delivery
       title: WebSub
       topic: Topic
+    suspensions:
+      bad_acct_msg: The confirmation value didn't match up. Are you suspending the right account?
+      hint_html: 'To confirm the suspension of the account, please enter %{value} into the field below:'
+      proceed: Proceed
+      title: Suspend %{acct}
+      warning_html: 'Suspending this account will <strong>irreversibly</strong> delete data from this account, which includes:'
     title: Administration
   admin_mailer:
     new_report:
@@ -650,11 +667,14 @@ en:
     publishing: Publishing
     web: Web
   remote_follow:
-    acct: Enter your username@domain you want to follow from
+    acct: Enter your username@domain you want to act from
     missing_resource: Could not find the required redirect URL for your account
     no_account_html: Don't have an account? You can <a href='%{sign_up_path}' target='_blank'>sign up here</a>
     proceed: Proceed to follow
     prompt: 'You are going to follow:'
+  remote_interaction:
+    proceed: Proceed to interact
+    prompt: 'You want to interact with this toot:'
   remote_unfollow:
     error: Error
     title: Title
@@ -738,6 +758,7 @@ en:
       private: Non-public toot cannot be pinned
       reblog: A boost cannot be pinned
     show_more: Show more
+    sign_in_to_participate: Sign in to participate in the conversation
     title: '%{name}: "%{quote}"'
     visibilities:
       private: Followers-only
