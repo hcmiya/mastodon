@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
   rescue_from Mastodon::NotPermittedError, with: :forbidden
 
   before_action :store_current_location, except: :raise_not_found, unless: :devise_controller?
-  before_action :check_suspension, if: :user_signed_in?
+  before_action :check_user_permissions, if: :user_signed_in?
 
   def raise_not_found
     raise ActionController::RoutingError, "No route matches #{params[:unmatched_route]}"
@@ -42,8 +42,8 @@ class ApplicationController < ActionController::Base
     forbidden unless current_user&.staff?
   end
 
-  def check_suspension
-    forbidden if current_user.account.suspended?
+  def check_user_permissions
+    forbidden if current_user.disabled? || current_user.account.suspended?
   end
 
   def after_sign_out_path_for(_resource_or_scope)
@@ -89,7 +89,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_theme
-    return Setting.default_settings['theme'] unless Themes.instance.names.include? current_user&.setting_theme
+    return Setting.theme unless Themes.instance.names.include? current_user&.setting_theme
     current_user.setting_theme
   end
 
