@@ -105,7 +105,7 @@ ja:
       memorialize: 追悼アカウント化
       moderation:
         all: すべて
-        silenced: サイレンス中
+        silenced: 隔離中
         suspended: 停止中
         title: モデレーション
       moderation_notes: モデレーションメモ
@@ -145,12 +145,12 @@ ja:
         created_reports: このアカウントで作られたレポート
         report: レポート
         targeted_reports: このアカウントについてのレポート
-      silence: サイレンス
+      silence: 隔離
       statuses: トゥート数
       subscribe: 購読する
       title: アカウント
       unconfirmed_email: 確認待ちのメールアドレス
-      undo_silenced: サイレンスから戻す
+      undo_silenced: 隔離から戻す
       undo_suspension: 停止から戻す
       unsubscribe: 購読の解除
       username: ユーザー名
@@ -175,26 +175,26 @@ ja:
         memorialize_account: "%{name}が%{target}を追悼アカウント化"
         promote_user: "%{name}が%{target}を昇格"
         remove_avatar_user: "%{name}が%{target}のアイコンを削除"
-        reopen_report: "%{name}がレポート%{target}を蒔き直し"
+        reopen_report: "%{name}がレポート%{target}を解決済みとしたのを撤回"
         reset_password_user: "%{name}が%{target}のパスワードをリセット"
         resolve_report: "%{name}がレポート%{target}を解決済みへ"
-        silence_account: "%{name}が%{target}をサイレンス化"
+        silence_account: "%{name}が%{target}を隔離化"
         suspend_account: "%{name}が%{target}を停止"
         unassigned_report: "%{name}がレポート%{target}の担当を外す"
-        unsilence_account: "%{name}が%{target}のサイレンスを解除"
+        unsilence_account: "%{name}が%{target}の隔離を解除"
         unsuspend_account: "%{name}が%{target}の停止を解除"
         update_custom_emoji: "%{name}がカスタム絵文字%{target}を更新"
         update_status: "%{name}が%{target}の投稿を更新"
-      deleted_status: "(削除されました)"
+      deleted_status: "(削除済)"
       title: 操作履歴
     custom_emojis:
       by_domain: ドメイン
       copied_msg: 絵文字のコピーをローカルに作成しました
       copy: コピー
       copy_failed_msg: 絵文字のコピーをローカルに作成できませんでした
-      created_msg: 絵文字の追加に成功しました!
+      created_msg: 絵文字の追加に成功しました
       delete: 削除
-      destroyed_msg: 絵文字の削除に成功しました!
+      destroyed_msg: 絵文字の削除に成功しました
       disable: 無効化
       disabled_msg: 絵文字を無効化しました
       emoji: 絵文字
@@ -210,7 +210,7 @@ ja:
       title: カスタム絵文字
       unlisted: 回覧
       update_failed_msg: 絵文字を更新できませんでした
-      updated_msg: 絵文字の更新に成功しました!
+      updated_msg: 絵文字の更新に成功しました
       upload: アップロード
     dashboard:
       backlog: 未処理のジョブ
@@ -242,16 +242,16 @@ ja:
         create: ブロックを作成
         hint: ドメインブロックはデータベース中のアカウント項目の作成を妨げませんが、遡って自動的に指定されたモデレーションをそれらのアカウントに適用します。
         severity:
-          desc_html: "『サイレンス』はアカウントのトゥートをフォローしていない人から隠します。『停止』はそのアカウントのコンテンツ、メディア、プロフィールデータをすべて削除します。メディアファイルの拒否は『なし』を使います。"
+          desc_html: "『隔離』はアカウントのトゥートをフォローしていない人から隠します。『停止』はそのアカウントのコンテンツ、メディア、プロフィールデータをすべて削除します。メディアファイルの拒否は『なし』を使います。"
           noop: なし
-          silence: サイレンス
+          silence: 隔離
           suspend: 停止
         title: 新規ドメインブロック
       reject_media: メディアファイルを拒否
       reject_media_hint: ローカルに保存されたメディアファイルを削除し、今後のダウンロードを拒否します。停止とは無関係です
       severities:
         noop: なし
-        silence: サイレンス
+        silence: 隔離
         suspend: 停止
       severity: 深刻度
       show:
@@ -259,7 +259,7 @@ ja:
           one: データベース中の一つのアカウントに影響します
           other: データベース中の%{count}個のアカウントに影響します
         retroactive:
-          silence: このドメインからの存在するすべてのアカウントのサイレンスを戻す
+          silence: このドメインからの存在するすべてのアカウントの隔離を戻す
           suspend: このドメインからの存在するすべてのアカウントの停止を戻す
         title: "%{domain}のドメインブロックを戻す"
         undo: 元に戻す
@@ -313,11 +313,11 @@ ja:
       created_at: レポート日時
       id: ID
       mark_as_resolved: 解決済みとしてマーク
-      mark_as_unresolved: 未解決として再び開く
+      mark_as_unresolved: 解決済みを撤回
       notes:
         create: 書き込む
         create_and_resolve: 書き込み、解決済みにする
-        create_and_unresolve: 書き込み、未解決として開く
+        create_and_unresolve: 書き込み、解決済みを撤回
         delete: 削除
         placeholder: 措置内容・その後の更新等
       reopen: 再び開く
@@ -327,7 +327,7 @@ ja:
       reported_by: 報告者
       resolved: 解決済み
       resolved_msg: レポートを解決済みと処理しました
-      silence_account: アカウントをサイレンス
+      silence_account: アカウントを隔離
       status: ステータス
       suspend_account: アカウントを停止
       target: ターゲット
