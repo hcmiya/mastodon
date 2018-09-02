@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
@@ -28,6 +28,10 @@ const componentMap = {
   'FAVOURITES': FavouritedStatuses,
   'LIST': ListTimeline,
 };
+
+const messages = defineMessages({
+  publish: { id: 'compose_form.publish', defaultMessage: 'Toot' },
+});
 
 const shouldHideFAB = path => path.match(/^\/statuses\//);
 
@@ -151,14 +155,14 @@ export default class ColumnsArea extends ImmutablePureComponent {
   }
 
   render () {
-    const { columns, children, singleColumn, isModalOpen } = this.props;
+    const { columns, children, singleColumn, isModalOpen, intl } = this.props;
     // const { shouldAnimate } = this.state;
 
     // const columnIndex = getIndex(this.context.router.history.location.pathname);
     this.pendingIndex = null;
 
     if (singleColumn) {
-      const floatingActionButton = shouldHideFAB(this.context.router.history.location.pathname) ? null : <Link key='floating-action-button' to='/statuses/new' className='floating-action-button'><i className='fa fa-pencil' /></Link>;
+      const floatingActionButton = shouldHideFAB(this.context.router.history.location.pathname) ? null : <Link key='floating-action-button' to='/statuses/new' className='floating-action-button' aria-label={intl.formatMessage(messages.publish)}><i className='fa fa-pencil' /></Link>;
 
       return [
         <div className='columns-area'>{children}</div>,
