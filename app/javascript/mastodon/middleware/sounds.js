@@ -1,3 +1,5 @@
+import { PdPSelected } from '../features/v6don/pdpsound';
+
 const createAudio = sources => {
   const audio = new Audio();
   sources.forEach(({ type, src }) => {
@@ -34,20 +36,7 @@ export default function soundsMiddleware() {
         type: 'audio/mpeg',
       },
     ]),
-    '1up': createAudio([
-      {
-        src: '/sounds/proprietary/1up.opus',
-        type: 'audio/ogg;codecs=opus',
-      },
-      {
-        src: '/sounds/proprietary/1up.mp4',
-        type: 'audio/mp4;codecs=mp4a.40.2',
-      },
-      {
-        src: '/sounds/proprietary/1up.ogg',
-        type: 'audio/ogg;codecs=vorbis',
-      },
-    ]),
+    pdp: new PdPSelected(),
   };
 
   return () => next => action => {

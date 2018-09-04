@@ -60,7 +60,7 @@ export function updateNotifications(notification, intlMessages, intlLocale) {
       dispatch({
         type: NOTIFICATIONS_UPDATE,
         notification,
-        meta: (playSound && !filtered) ? { sound: '1up' } : undefined,
+        meta: (playSound && !filtered) ? { sound: 'pdp' } : undefined,
       });
 
       fetchRelatedRelationships(dispatch, [notification]);
